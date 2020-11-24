@@ -48,7 +48,7 @@ def supprimer_colonne_vide(df) :
             if valeur == 0:
                 compteur +=1
                 
-        if compteur == len(df) or colonne == 'Timestamp' or colonne == 'TimeStamp' or colonne == 'Label':
+        if compteur == len(df) or colonne == 'Timestamp' or colonne == 'TimeStamp' or colonne == 'index' or colonne == 'Label':
             del df[colonne]
 
 def equilibrage_donnees(df):
