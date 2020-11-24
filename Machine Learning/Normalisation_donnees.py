@@ -3,11 +3,11 @@
 ''' -------------------- Normalisation des données -------------------------------- '''
 
 import pandas as pd
-
+import numpy as np
 def normalize(colonne):
     max_value = colonne.max()
     min_value = colonne.min()
-    colonne = (colonne - min_value) / (max_value - min_value)
+    colonne = np.round((colonne - min_value) / (max_value - min_value), 5)
     return colonne
 
 def NormalizeDataset(dataset) :
