@@ -21,7 +21,7 @@ def DTC(df):
     X = df.drop(['Intrusion'], axis = 1)
     y = df['Intrusion']
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
        
     # Create Decision Tree classifer object
     DTC = DecisionTreeClassifier(criterion="entropy", max_depth=3)
