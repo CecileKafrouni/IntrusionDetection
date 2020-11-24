@@ -29,3 +29,6 @@ df_total_csv_normalisee.to_csv("df_total_csv_normalisee.csv", sep=';', index=Fal
 
 df_feature_importances = fi.FeaturesImportances(df_total_csv_normalisee)
 df_feature_importances.to_csv("df_feature_importances.csv", sep=';', index=False)
+
+df_correlation = cor.Correlation(df_total_csv_normalisee)
+df_correlation.to_csv("df_correlation.csv", sep=';', index=False)
