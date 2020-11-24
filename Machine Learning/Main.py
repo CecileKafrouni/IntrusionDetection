@@ -10,6 +10,7 @@ import pandas as pd
 import Preparation_CSV as pc        
 import feature_importances as fi
 import Normalisation_donnees as nor
+import Correlation as cor
 
 
 df_malicious = pd.read_csv("data/l2-malicious.csv")
