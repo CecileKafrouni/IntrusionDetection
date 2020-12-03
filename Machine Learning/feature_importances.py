@@ -9,10 +9,10 @@ from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 from functools import reduce
 
-def FeaturesImportances(df):
+def FeaturesImportances(df, colonne):
     #df.astype(np.float32)
-    X = df.drop(['Intrusion','SourceIP','DestinationIP'], axis = 1)
-    y = df['Intrusion']
+    X = df.drop([colonne,'SourceIP','DestinationIP'], axis = 1)
+    y = df[colonne]
     X.astype(np.float32)
     
     
@@ -51,11 +51,11 @@ def FeaturesImportances(df):
 
 # Pour créer une dataframe avec que les colonnes importantes
     
-    feature_importances = pd.DataFrame(rf.feature_importances_, index = X_train.columns, columns=['Intrusion']).sort_values('Intrusion',ascending=False)
+    feature_importances = pd.DataFrame(rf.feature_importances_, index = X_train.columns, columns=[colonne]).sort_values(colonne,ascending=False)
     df_copy = df.copy()
     
     for i in range(0,len(feature_importances)):
-        if feature_importances.iloc[i]['Intrusion'] < 0.001:
+        if feature_importances.iloc[i][colonne] < 0.001:
             print(feature_importances.iloc[i])
             del df_copy[feature_importances.iloc[i].name]
   
