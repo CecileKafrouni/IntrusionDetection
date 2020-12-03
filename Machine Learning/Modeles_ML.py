@@ -14,12 +14,12 @@ from sklearn.metrics import accuracy_score
 
 ############## DECISION TREE CLASSIFIER ##################
 
-def DTC(df):
+def DTC(df, colonne):
     
     t_debut = time.time()
     
-    X = df.drop(['Intrusion'], axis = 1)
-    y = df['Intrusion']
+    X = df.drop([colonne], axis = 1)
+    y = df[colonne]
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
        
@@ -51,12 +51,12 @@ def DTC_Prediction(df, DTC):
 
 ############## RANDOM FOREST CLASSIFIER ##################
 
-def RFC(df):
+def RFC(df, colonne):
     
     t_debut = time.time()
     
-    X = df.drop(['Intrusion'], axis = 1)
-    y = df['Intrusion']
+    X = df.drop([colonne], axis = 1)
+    y = df[colonne]
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     
@@ -88,17 +88,17 @@ def RFC_Prediction(df, RFC):
 
 ############### XGBOOST CLASSIFIER ########################
 
-def XGB(df):
+def XGB(df, colonne):
     
     t_debut = time.time()
     
-    X = df.drop(['Intrusion'], axis = 1)
-    y = df['Intrusion']
+    X = df.drop([colonne], axis = 1)
+    y = df[colonne]
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     
     # Create XGBoost Classifier model
-    XGB = XGBClassifier(objective="binary:logistic")
+    XGB = XGBClassifier(objective="binary:logistic", random_state=42)
     
     # Train XGBoost Classifer
     XGB = XGB.fit(X_train,y_train)
