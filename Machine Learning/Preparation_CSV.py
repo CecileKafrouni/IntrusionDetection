@@ -27,19 +27,25 @@ def analyser_df(df):
     print("\n ELEMENTS DE LA COLONNE LABEL AVEC NB DE FOIS QU'ILS REVIENNENT")
     print(df.Label.value_counts())
 
-def rajouter_colonne_intrusion(df) :
+def rajouter_colonne(df, colonne) :
     
-    df['Intrusion'] = 0
+    df[colonne] = 0
     z = 0 
-    
-   
-    for x in df.Intrusion:
-        if df.Label[z] == 'Benign':
-            df.Intrusion[z] = 0
-            
-        else :
-            df.Intrusion[z] = 1       
-        z = z+1
+
+    for x in df[colonne]:
+        if (colonne == 'Intrusion'):
+            if df.Label[z] == 'Benign':
+                df[colonne][z] = 0
+            else :
+                df[colonne][z] = 1       
+            z = z+1
+        else:
+            if df.Label[z] == 'DoH':
+                df[colonne][z] = 0
+                
+            else :
+                df[colonne][z] = 1       
+            z = z+1
  
 def supprimer_colonne_vide(df) :
     for colonne in df:
@@ -51,29 +57,49 @@ def supprimer_colonne_vide(df) :
         if compteur == len(df) or colonne == 'Timestamp' or colonne == 'TimeStamp' or colonne == 'index' or colonne == 'Label':
             del df[colonne]
 
-def equilibrage_donnees(df):
+def equilibrage_donnees(df, colonne):
     
-    df_intrusion = df[df['Label'] != 'Benign' ]
-    df_intrusion = df_intrusion.reset_index()
-    nb_Attack = len(df_intrusion)
-    print('il y a ' + str(nb_Attack) +  ' attaques')
+    if(colonne == 'Intrusion'):
+        df_intrusion = df[df['Label'] != 'Benign' ]
+        df_intrusion = df_intrusion.reset_index()
+        nb_Attack = len(df_intrusion)
+        print('il y a ' + str(nb_Attack) +  ' attaques')
+        
+        df_benign = df[df['Label'] == 'Benign' ]
+        df_benign = df_benign.reset_index()
+        nb_benign = len(df_benign)
+        print('il y a ' + str(nb_benign) +  ' cas benign')
+        
+        if nb_Attack < nb_benign :
+                df_benign = df_benign[0:len(df_intrusion)]
+                
+        if nb_Attack > nb_benign :
+                df_intrusion = df_intrusion[0:len(df_benign)]
+                
+        df_equilibre = pd.concat([df_intrusion,df_benign])
+        df_equilibre = df_equilibre.reset_index(drop = True)
+        
+    else:
+        df_nonDoH = df[df['Label'] != 'DoH' ]
+        df_nonDoH = df_nonDoH.reset_index()
+        nb_nonDoH = len(df_nonDoH)
+        print('il y a ' + str(nb_nonDoH) +  ' non DoH')
+        
+        df_DoH = df[df['Label'] == 'DoH' ]
+        df_DoH = df_DoH.reset_index()
+        nb_DoH = len(df_DoH)
+        print('il y a ' + str(nb_DoH) +  ' DoH')
+        
+        if nb_nonDoH < nb_DoH :
+                df_DoH = df_DoH[0:len(df_nonDoH)]
+                
+        if nb_nonDoH > nb_DoH :
+                df_nonDoH = df_nonDoH[0:len(df_DoH)]
     
-    df_benign = df[df['Label'] == 'Benign' ]
-    df_benign = df_benign.reset_index()
-    nb_benign = len(df_benign)
-    print('il y a ' + str(nb_benign) +  ' cas benign')
+        df_equilibre = pd.concat([df_nonDoH,df_DoH])
+        df_equilibre = df_equilibre.reset_index(drop = True)
     
-    if nb_Attack < nb_benign :
-            df_benign = df_benign[0:len(df_intrusion)]
-            
-    if nb_Attack > nb_benign :
-            df_intrusion = df_intrusion[0:len(df_benign)]
-              
-              
-    
-    df_equilibre = pd.concat([df_intrusion,df_benign])
-    df_equilibre = df_equilibre.reset_index(drop = True)
-    
+    print('Apres equilibrage on a :\n')
     print(df_equilibre['Label'].value_counts())
               
     return df_equilibre    
@@ -95,12 +121,10 @@ def nettoyage(df):
     return result
 
 
-
-
-def Preparation_CSV(df):
+def Preparation_CSV(df, colonne):
     #analyser_df(df)
-    df = equilibrage_donnees(df)
-    rajouter_colonne_intrusion(df)  
+    df = equilibrage_donnees(df, colonne)
+    rajouter_colonne(df, colonne)  
     supprimer_colonne_vide(df)
     
     df = nettoyage(df)
