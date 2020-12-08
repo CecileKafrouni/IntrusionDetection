@@ -12,10 +12,9 @@ def normalize(colonne):
 
 def NormalizeDataset(dataset) :
     for colonne in dataset.columns:
-        if(dataset[colonne].dtypes == 'float64' or dataset[colonne].dtypes == 'int64' ):
+        if(dataset[colonne].dtypes == 'float64' or dataset[colonne].dtypes == 'int64' and colonne != 'SourcePort' and colonne != 'DestinationPort'):
            dataset[colonne] = normalize(dataset[colonne])
            
     #dataset_normalise = normalize(dataset.iloc[:,2:len(dataset)])
     #dataset_final_normalise = pd.concat([dataset.iloc[:,0:2], dataset_normalise, dataset.iloc[:,len(dataset):]], axis=1)
     return dataset
-
