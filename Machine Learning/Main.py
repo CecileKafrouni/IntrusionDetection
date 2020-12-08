@@ -14,6 +14,7 @@ import Normalisation_donnees as nor
 import Correlation as cor
 import Modeles_ML as ml
 import Split as sp
+import XGBoost_Randomized_Search as XGB_RS
 
 def Main():
     reponse = input('Bonjour, que voulez vous tester ? \n A. DoH \n B. Intrusion \n\n')
@@ -49,21 +50,23 @@ def Main():
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
         df_correlation_DoH.to_csv("DoH/df_correlation_DoH.csv", sep=';', index=False)
         '''
+        
         # Modele ML
         # DTC Decision Tree Classifier
-        DTC_DoH = ml.DTC(df_total_csv_normalisee_DoH, colonne)
+        DTC_DoH = ml.DTC(df_split, colonne)
         filename_DTC_DoH = 'DoH/finalized_model_DTC_DoH.sav'
         pickle.dump(DTC_DoH, open(filename_DTC_DoH, 'wb'))
-        
+       
         # RFC Random Forest Classifier
         RFC_DoH = ml.RFC(df_total_csv_normalisee_DoH, colonne)
         filename_RFC_DoH = 'DoH/finalized_model_RFC_DoH.sav'
         pickle.dump(RFC_DoH, open(filename_RFC_DoH, 'wb'))
         
-        # XGB XGBoost Classifier
-        XGB_DoH = ml.XGB(df_total_csv_normalisee_DoH, colonne)
+        # XGB XGBoost Classifier        
+        XGB_DoH = ml.XGB(df_split, colonne)
         filename_XGB_DoH = 'DoH/finalized_model_XGB_DoH.sav'
         pickle.dump(XGB_DoH, open(filename_XGB_DoH, 'wb'))
+        
         
     elif(reponse == 'B'):
         print('\nVous avez répondu B, c\'est parti pour Intrusion\n')
@@ -86,6 +89,7 @@ def Main():
         df_split = sp.splitIp(df_total_csv_normalisee_Intrusion, 'SourceIP')
         df_split = sp.splitIp(df_split, 'DestinationIP')
         df_split.to_csv("Intrusion/df_total_csv_ipsplit_Intrusion.csv", sep=';', index=False)
+        
         '''
         # Features importances
         df_feature_importances_Intrusion = fi.FeaturesImportances(df_split, colonne)
@@ -98,24 +102,23 @@ def Main():
         
         # Modele ML
         # DTC Decision Tree Classifier
-        DTC_Intrusion = ml.DTC(df_total_csv_normalisee_Intrusion, colonne)
+        DTC_Intrusion = ml.DTC(df_split, colonne)
         filename_DTC_Intrusion = 'Intrusion/finalized_model_DTC_Intrusion.sav'
         pickle.dump(DTC_Intrusion, open(filename_DTC_Intrusion, 'wb'))
-        
+       
         # RFC Random Forest Classifier
         RFC_Intrusion = ml.RFC(df_total_csv_normalisee_Intrusion, colonne)
         filename_RFC_Intrusion = 'Intrusion/finalized_model_RFC_Intrusion.sav'
         pickle.dump(RFC_Intrusion, open(filename_RFC_Intrusion, 'wb'))
         
-        # XGB XGBoost Classifier
-        XGB_Intrusion = ml.XGB(df_total_csv_normalisee_Intrusion, colonne)
+        # XGB XGBoost Classifier        
+        XGB_Intrusion = ml.XGB(df_split, colonne)
         filename_XGB_Intrusion = 'Intrusion/finalized_model_XGB_Intrusion.sav'
         pickle.dump(XGB_Intrusion, open(filename_XGB_Intrusion, 'wb'))
-
+        
     else:
         print('\nVous n\' avez pas bien répondu à la question, réessayez svp')
         Main()
-
 
 # On appelle notre fonction main
 Main()
