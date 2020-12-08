@@ -11,7 +11,7 @@ from functools import reduce
 
 def FeaturesImportances(df, colonne):
     #df.astype(np.float32)
-    X = df.drop([colonne,'SourceIP','DestinationIP'], axis = 1)
+    X = df.drop([colonne], axis = 1)
     y = df[colonne]
     X.astype(np.float32)
     
@@ -31,20 +31,20 @@ def FeaturesImportances(df, colonne):
     rf = RandomForestRegressor(n_estimators = 25)
     rf.fit(X_train, y_train)
     
-    importances1 = pd.Series(index=X.columns[:12],
-                            data=rf.feature_importances_[:12])
+    importances1 = pd.Series(index=X.columns[:15],
+                            data=rf.feature_importances_[:15])
     importances_sorted1 = importances1.sort_values()
     importances_sorted1.plot(kind='barh', color='red', title='1')
     plt.show()
     
-    importances2 = pd.Series(index=X.columns[12:24],
-                            data=rf.feature_importances_[12:24])
+    importances2 = pd.Series(index=X.columns[15:30],
+                            data=rf.feature_importances_[15:30])
     importances_sorted2 = importances2.sort_values()
     importances_sorted2.plot(kind='barh', color='red', title='2')
     plt.show()
     
-    importances3 = pd.Series(index=X.columns[24:36],
-                            data=rf.feature_importances_[24:36])
+    importances3 = pd.Series(index=X.columns[30:],
+                            data=rf.feature_importances_[30:])
     importances_sorted3 = importances3.sort_values()
     importances_sorted3.plot(kind='barh', color='red', title='3')
     plt.show()
@@ -56,7 +56,6 @@ def FeaturesImportances(df, colonne):
     
     for i in range(0,len(feature_importances)):
         if feature_importances.iloc[i][colonne] < 0.001:
-            print(feature_importances.iloc[i])
             del df_copy[feature_importances.iloc[i].name]
   
     return df_copy
