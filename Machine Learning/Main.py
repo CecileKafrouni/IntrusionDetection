@@ -13,6 +13,7 @@ import feature_importances as fi
 import Normalisation_donnees as nor
 import Correlation as cor
 import Modeles_ML as ml
+import Split as sp
 
 def Main():
     reponse = input('Bonjour, que voulez vous tester ? \n A. DoH \n B. Intrusion \n\n')
@@ -34,6 +35,12 @@ def Main():
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
         
+        # On split les adresses IP
+        df_split = sp.splitIp(df_total_csv_normalisee_DoH, 'SourceIP')
+        df_split = sp.splitIp(df_split, 'DestinationIP')
+        df_split.to_csv("DoH/df_total_csv_ipsplit_DoH.csv", sep=';', index=False)
+        
+        '''
         # Features importances
         df_feature_importances_DoH = fi.FeaturesImportances(df_total_csv_normalisee_DoH, colonne)
         df_feature_importances_DoH.to_csv("DoH/df_feature_importances_DoH.csv", sep=';', index=False)
@@ -41,7 +48,7 @@ def Main():
         # Correlation
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
         df_correlation_DoH.to_csv("DoH/df_correlation_DoH.csv", sep=';', index=False)
-        
+        '''
         # Modele ML
         # DTC Decision Tree Classifier
         DTC_DoH = ml.DTC(df_total_csv_normalisee_DoH, colonne)
@@ -75,13 +82,19 @@ def Main():
         df_total_csv_normalisee_Intrusion = nor.NormalizeDataset(df_total_csv_new_Intrusion)
         df_total_csv_normalisee_Intrusion.to_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';', index=False)
         
+        # On split les adresses IP
+        df_split = sp.splitIp(df_total_csv_normalisee_Intrusion, 'SourceIP')
+        df_split = sp.splitIp(df_split, 'DestinationIP')
+        df_split.to_csv("Intrusion/df_total_csv_ipsplit_Intrusion.csv", sep=';', index=False)
+        '''
         # Features importances
-        df_feature_importances_Intrusion = fi.FeaturesImportances(df_total_csv_normalisee_Intrusion, colonne)
+        df_feature_importances_Intrusion = fi.FeaturesImportances(df_split, colonne)
         df_feature_importances_Intrusion.to_csv("Intrusion/df_feature_importances_Intrusion.csv", sep=';', index=False)
     
         # Correlation
-        df_correlation_Intrusion = cor.Correlation(df_total_csv_normalisee_Intrusion, colonne)
+        df_correlation_Intrusion = cor.Correlation(df_split, colonne)
         df_correlation_Intrusion.to_csv("Intrusion/df_correlation_Intrusion.csv", sep=';', index=False)
+        '''
         
         # Modele ML
         # DTC Decision Tree Classifier
@@ -98,7 +111,7 @@ def Main():
         XGB_Intrusion = ml.XGB(df_total_csv_normalisee_Intrusion, colonne)
         filename_XGB_Intrusion = 'Intrusion/finalized_model_XGB_Intrusion.sav'
         pickle.dump(XGB_Intrusion, open(filename_XGB_Intrusion, 'wb'))
-        
+
     else:
         print('\nVous n\' avez pas bien répondu à la question, réessayez svp')
         Main()
@@ -106,22 +119,3 @@ def Main():
 
 # On appelle notre fonction main
 Main()
-
-
-
-# -----------------------------------------------------------------------------------
-'''
-import re
- 
-i=0
-df_benign = pd.read_csv("data/l2-benign.csv")
-for value in df_benign['SourceIP'].values:
-    charsToRemove = ["."]
-    df_benign['SourceIP'][i]=re.sub("|".join([re.escape(x) for x in charsToRemove]), "", value)
-    print(re.sub("|".join([re.escape(x) for x in charsToRemove]), "", value))
-    i+=1
-
-print(df_benign['SourceIP'].str.split('.'))
-# et apres mettre dans 4colonnes 
-
-'''
