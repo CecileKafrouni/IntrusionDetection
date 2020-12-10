@@ -14,7 +14,6 @@ import Normalisation_donnees as nor
 import Correlation as cor
 import Modeles_ML as ml
 import Split as sp
-import XGBoost_Randomized_Search as XGB_RS
 
 def Main():
     reponse = input('Bonjour, que voulez vous tester ? \n A. DoH \n B. Intrusion \n\n')
