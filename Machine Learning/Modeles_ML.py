@@ -41,8 +41,8 @@ def DTC_Randomized_Search(df, colonne):
     rs_dtc.fit(X_train,y_train)
     
     # Print the tuned parameters and score
-    print("Tuned Decision Tree Parameters: {}".format(tree_cv.best_params_))
-    print("Best score is {}".format(tree_cv.best_score_))
+    print("Tuned Decision Tree Parameters: {}".format(rs_dtc.best_params_))
+    print("Best score is {}".format(rs_dtc.best_score_))
     
     return rs_dtc
     
@@ -51,7 +51,7 @@ def DTC(df, colonne):
     
     print("Training XGBoost Classifier Algo ... ")
     
-    tree_cv = DTC_Randomized_Search(df, colonne)
+    rs_dtc = DTC_Randomized_Search(df, colonne)
     t_debut = time.time()
     
     X = df.drop([colonne], axis = 1)
@@ -61,7 +61,7 @@ def DTC(df, colonne):
        
     # Create Decision Tree classifer object
     DTC = DecisionTreeClassifier()
-    DTC.set_params(**tree_cv.best_params_)
+    DTC.set_params(**rs_dtc.best_params_)
     
     # Train Decision Tree Classifer
     DTC = DTC.fit(X_train,y_train)
