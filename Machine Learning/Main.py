@@ -5,6 +5,12 @@
 ------------------------------ Main -----------------------------------
 '''
 
+import sys
+
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
+
 import pandas as pd
 import pickle
 
@@ -28,10 +34,12 @@ def Main():
         df_total_csv_DoH = pd.concat([df_nondoh,df_doh])
     
         # Preparation des données
+        print("Nous nettoyons les données ...")
         df_total_csv_new_DoH = pc.Preparation_CSV(df_total_csv_DoH, colonne)
         df_total_csv_new_DoH.to_csv("DoH/total_csv_copy_DoH.csv", sep=';', index=False)
         
         # On normalise les données pour les modèles de ML au cas ou
+        print("Nous normalisons les données ...")
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
         
@@ -51,6 +59,7 @@ def Main():
         '''
         
         # Modele ML
+        print("Nous démarrons les modèles de Machine Learning ...")
         # DTC Decision Tree Classifier
         DTC_DoH = ml.DTC(df_split, colonne)
         filename_DTC_DoH = 'DoH/finalized_model_DTC_DoH.sav'
@@ -77,10 +86,12 @@ def Main():
         df_total_csv_Intrusion = pd.concat([df_malicious,df_benign])
     
         # Preparation des données
+        print("Nous nettoyons les données ...")
         df_total_csv_new_Intrusion = pc.Preparation_CSV(df_total_csv_Intrusion, colonne)
         df_total_csv_new_Intrusion.to_csv("Intrusion/total_csv_copy_Intrusion.csv", sep=';', index=False)
         
         # On normalise les données pour les modèles de ML au cas ou
+        print("Nous normalisons les données ...")
         df_total_csv_normalisee_Intrusion = nor.NormalizeDataset(df_total_csv_new_Intrusion)
         df_total_csv_normalisee_Intrusion.to_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';', index=False)
         
@@ -100,6 +111,7 @@ def Main():
         '''
         
         # Modele ML
+        print("Nous démarrons les modèles de Machine Learning ... \n\n")
         # DTC Decision Tree Classifier
         DTC_Intrusion = ml.DTC(df_split, colonne)
         filename_DTC_Intrusion = 'Intrusion/finalized_model_DTC_Intrusion.sav'
