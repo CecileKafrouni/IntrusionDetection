@@ -63,12 +63,12 @@ def equilibrage_donnees(df, colonne):
         df_intrusion = df[df['Label'] != 'Benign' ]
         df_intrusion = df_intrusion.reset_index()
         nb_Attack = len(df_intrusion)
-        print('il y a ' + str(nb_Attack) +  ' attaques')
+        #print('il y a ' + str(nb_Attack) +  ' attaques')
         
         df_benign = df[df['Label'] == 'Benign' ]
         df_benign = df_benign.reset_index()
         nb_benign = len(df_benign)
-        print('il y a ' + str(nb_benign) +  ' cas benign')
+        #print('il y a ' + str(nb_benign) +  ' cas benign')
         
         if nb_Attack < nb_benign :
                 df_benign = df_benign[0:len(df_intrusion)]
@@ -83,12 +83,12 @@ def equilibrage_donnees(df, colonne):
         df_nonDoH = df[df['Label'] != 'DoH' ]
         df_nonDoH = df_nonDoH.reset_index()
         nb_nonDoH = len(df_nonDoH)
-        print('il y a ' + str(nb_nonDoH) +  ' non DoH')
+        #print('il y a ' + str(nb_nonDoH) +  ' non DoH')
         
         df_DoH = df[df['Label'] == 'DoH' ]
         df_DoH = df_DoH.reset_index()
         nb_DoH = len(df_DoH)
-        print('il y a ' + str(nb_DoH) +  ' DoH')
+        #print('il y a ' + str(nb_DoH) +  ' DoH')
         
         if nb_nonDoH < nb_DoH :
                 df_DoH = df_DoH[0:len(df_nonDoH)]
@@ -99,8 +99,8 @@ def equilibrage_donnees(df, colonne):
         df_equilibre = pd.concat([df_nonDoH,df_DoH])
         df_equilibre = df_equilibre.reset_index(drop = True)
     
-    print('Apres equilibrage on a :\n')
-    print(df_equilibre['Label'].value_counts())
+    #print('Apres equilibrage on a :\n')
+    #print(df_equilibre['Label'].value_counts())
               
     return df_equilibre    
 
