@@ -1,23 +1,24 @@
-# Librairies needed 
+# Functions
+import feature_importances as fi
+import ROC_curve as roc
+import cross_validation as cv
 
+#Math modules
 import pandas as pd
+import numpy as np
 import time
 from scipy.stats import randint
 
+#Models tools
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import classification_report
+
+#Models
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
-from sklearn.model_selection import RandomizedSearchCV
 
-
-from sklearn.metrics import classification_report
-from sklearn import metrics
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import cross_val_score
-
-import matplotlib.pyplot as plt
-import numpy as np
 
 ################################# DECISION TREE CLASSIFIER ####################################
 
@@ -80,54 +81,10 @@ def DTC(df, colonne):
     
     print("Temps pour DTClassifier (en sec): ", np.round(t_total,4))
     
-    # -------------- FEATURES IMPORTANCES ------------------------------
-    DTC_Xy = DTC.fit(X,y)
-    importances1 = pd.Series(index=X.columns[:13],
-                            data=DTC_Xy.feature_importances_[:13])
-    importances_sorted1 = importances1.sort_values()
-    importances_sorted1.plot(kind='barh', color='red', title='Decision Tree Classifier - Features importance 1/3')
-    plt.show()
-    
-    importances2 = pd.Series(index=X.columns[13:26],
-                            data=DTC_Xy.feature_importances_[13:26])
-    importances_sorted2 = importances2.sort_values()
-    importances_sorted2.plot(kind='barh', color='red', title='Decision Tree Classifier - Features importance 2/3')
-    plt.show()
-    
-    importances3 = pd.Series(index=X.columns[26:],
-                            data=DTC_Xy.feature_importances_[26:])
-    importances_sorted3 = importances3.sort_values()
-    importances_sorted3.plot(kind='barh', color='red', title='Decision Tree Classifier - Features importance 3/3')
-    plt.show()
-    
-    
-    
-    
-    #-------------------- plot ROC curve -------------------
-    # calculate the fpr and tpr for all thresholds of the classification
-    probs = DTC.predict_proba(X_test)
-    preds = probs[:,1]
-    fpr, tpr, threshold = metrics.roc_curve(y_test, preds)
-    roc_auc = metrics.auc(fpr, tpr)
-    
-    # method I: plt
-    
-    plt.title('Receiver Operating Characteristic')
-    plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
-    plt.legend(loc = 'lower right')
-    plt.plot([0, 1], [0, 1],'r--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
-    plt.show()
-    
-    #------------------- Vross-validation -----------------------
-    scores = cross_val_score(DTC, X, y, cv=5)
-    #print("Score :", scores)
-    print("\nAccuracy: %0.2f (+/- %0.2f)\n\n" % (scores.mean(), scores.std() * 2))
-    
-    
+    fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
+    roc.ROC_curve(df, colonne, DTC, 'Decision Tree Classifier')
+    cv.cross_validation(df, colonne, DTC, 'Decision Tree Classifier')
+        
     return DTC
     
 def DTC_Prediction(df, DTC):    
@@ -198,52 +155,10 @@ def RFC(df, colonne):
     t_total = t_fin - t_debut
     
     print("Temps pour RFClassifier (en sec): ", np.round(t_total,4))
-    
-    # -------------- FEATURES IMPORTANCES ------------------------------
-    RFC_Xy = RFC.fit(X,y)
-    
-    importances1 = pd.Series(index=X.columns[:13],
-                            data=RFC_Xy.feature_importances_[:13])
-    importances_sorted1 = importances1.sort_values()
-    importances_sorted1.plot(kind='barh', color='blue', title='Random Forest Classifier - Features importance 1/3')
-    plt.show()
-    
-    importances2 = pd.Series(index=X.columns[13:26],
-                            data=RFC_Xy.feature_importances_[13:26])
-    importances_sorted2 = importances2.sort_values()
-    importances_sorted2.plot(kind='barh', color='blue', title='Random Forest Classifier - Features importance 2/3')
-    plt.show()
-    
-    importances3 = pd.Series(index=X.columns[26:],
-                            data=RFC_Xy.feature_importances_[26:])
-    importances_sorted3 = importances3.sort_values()
-    importances_sorted3.plot(kind='barh', color='blue', title='Random Forest Classifier - Features importance 3/3')
-    plt.show()
-    
-    
-    #-------------------- plot ROC curve -------------------
-    # calculate the fpr and tpr for all thresholds of the classification
-    probs = RFC.predict_proba(X_test)
-    preds = probs[:,1]
-    fpr, tpr, threshold = metrics.roc_curve(y_test, preds)
-    roc_auc = metrics.auc(fpr, tpr)
-    
-    # method I: plt
-    
-    plt.title('Receiver Operating Characteristic')
-    plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
-    plt.legend(loc = 'lower right')
-    plt.plot([0, 1], [0, 1],'r--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
-    plt.show()
-    
-    #------------------- Vross-validation -----------------------
-    scores = cross_val_score(RFC, X, y, cv=5)
-    #print("Score :", scores)
-    print("\nAccuracy: %0.2f (+/- %0.2f)\n\n" % (scores.mean(), scores.std() * 2))
+
+    fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
+    roc.ROC_curve(df, colonne, RFC, 'Random Forest Classifier')
+    cv.cross_validation(df, colonne, RFC, 'Random Forest Classifier')
     
     return RFC
 
@@ -318,51 +233,10 @@ def XGB(df, colonne):
     t_total = t_fin - t_debut
     
     print("Temps pour XGBoost (en sec): ", np.round(t_total,4))
-    
-    # -------------- FEATURES IMPORTANCES ------------------------------
-    XGB_Xy = XGB.fit(X_train,y_train)
-    
-    importances1 = pd.Series(index=X.columns[:13],
-                            data=XGB_Xy.feature_importances_[:13])
-    importances_sorted1 = importances1.sort_values()
-    importances_sorted1.plot(kind='barh', color='green', title='XGBoost Classifier - Features importance 1/3')
-    plt.show()
-    
-    importances2 = pd.Series(index=X.columns[13:26],
-                            data=XGB_Xy.feature_importances_[13:26])
-    importances_sorted2 = importances2.sort_values()
-    importances_sorted2.plot(kind='barh', color='green', title='XGBoost Classifier - Features importance 2/3')
-    plt.show()
-    
-    importances3 = pd.Series(index=X.columns[26:],
-                            data=XGB_Xy.feature_importances_[26:])
-    importances_sorted3 = importances3.sort_values()
-    importances_sorted3.plot(kind='barh', color='green', title='XGBoost Classifier - Features importance 3/3')
-    plt.show()
-    
-    #-------------------- plot ROC curve -------------------
-    # calculate the fpr and tpr for all thresholds of the classification
-    probs = XGB.predict_proba(X_test)
-    preds = probs[:,1]
-    fpr, tpr, threshold = metrics.roc_curve(y_test, preds)
-    roc_auc = metrics.auc(fpr, tpr)
-    
-    # method I: plt
-    
-    plt.title('Receiver Operating Characteristic')
-    plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
-    plt.legend(loc = 'lower right')
-    plt.plot([0, 1], [0, 1],'r--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
-    plt.show()
-    
-    #------------------- Vross-validation -----------------------
-    scores = cross_val_score(XGB, X, y, cv=5)
-    #print("Score :", scores)
-    print("\nAccuracy: %0.2f (+/- %0.2f)\n\n" % (scores.mean(), scores.std() * 2))
+
+    fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
+    roc.ROC_curve(df, colonne, XGB, 'XGBoost Classifier')
+    cv.cross_validation(df, colonne, XGB, 'XGBoost Classifier')
     
     return XGB
 
