@@ -8,6 +8,12 @@
 # Librairies 
 import pandas as pd
 import numpy as np
+import imblearn
+from collections import Counter
+from sklearn.datasets import make_classification
+from imblearn.over_sampling import SMOTE
+from matplotlib import pyplot
+from numpy import where
 
 # Les fonctions
 
@@ -34,19 +40,21 @@ def rajouter_colonne(df, colonne) :
 
     for x in df[colonne]:
         if (colonne == 'Intrusion'):
-            if df.Label[z] == 'Benign':
+            if(df.Label[z] == 'Benign'):
                 df[colonne][z] = 0
             else :
                 df[colonne][z] = 1       
             z = z+1
         else:
-            if df.Label[z] == 'DoH':
+            if(df.Label[z] == 'DoH'):
                 df[colonne][z] = 0
                 
             else :
                 df[colonne][z] = 1       
             z = z+1
  
+ 
+    
 def supprimer_colonne_vide(df) :
     for colonne in df:
         compteur = 0
@@ -59,7 +67,31 @@ def supprimer_colonne_vide(df) :
 
 def equilibrage_donnees(df, colonne):
     
+    X = df.drop([colonne], axis = 1)
+    y = df[colonne]
+    
+    # summarize class distribution
+    counter = Counter(y)
+    print(counter)
+    # transform the dataset
+    oversample = SMOTE()
+    X, y = oversample.fit_resample(X, y)
+    
+    # summarize the new class distribution
+    counter = Counter(y)
+    print(counter)
+    '''
+    # scatter plot of examples by class label
+    for label, _ in counter.items():
+    	row_ix = where(y == label)[0]
+    	pyplot.scatter(X[row_ix, 0], X[row_ix, 1], label=str(label))
+    pyplot.legend()
+    pyplot.show()
+    '''
+    
+    '''
     if(colonne == 'Intrusion'):
+        
         df_intrusion = df[df['Label'] != 'Benign' ]
         df_intrusion = df_intrusion.reset_index()
         nb_Attack = len(df_intrusion)
@@ -101,8 +133,8 @@ def equilibrage_donnees(df, colonne):
     
     #print('Apres equilibrage on a :\n')
     #print(df_equilibre['Label'].value_counts())
-              
-    return df_equilibre    
+           '''   
+    return df    
 
 
 
@@ -121,14 +153,28 @@ def nettoyage(df):
     return result
 
 
+
+def IP2Int(df,column):
+    i=0
+    for values in df[column].values:
+        o = list(map(int, values.split('.')))
+        res = (16777216 * o[0]) + (65536 * o[1]) + (256 * o[2]) + o[3]
+        df[column][i] = res
+        i+=1
+    return df
+
 def Preparation_CSV(df, colonne):
     #analyser_df(df)
-    df = equilibrage_donnees(df, colonne)
-    rajouter_colonne(df, colonne)  
+    
+    rajouter_colonne(df, colonne)
+    
+    df = IP2Int(df, 'SourceIP')
+    df = IP2Int(df, 'DestinationIP')
+    
     supprimer_colonne_vide(df)
     
     df = nettoyage(df)
-    
+    df = equilibrage_donnees(df, colonne)
     df_copy = df.copy()
     
     return df_copy
