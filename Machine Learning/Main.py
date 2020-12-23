@@ -32,6 +32,7 @@ def Main():
         df_nondoh = pd.read_csv("data/l1-nondoh.csv")
     
         df_total_csv_DoH = pd.concat([df_nondoh,df_doh])
+        df_total_csv_DoH.reset_index(inplace=True)
     
         # Preparation des données
         print("Nous nettoyons les données ...")
@@ -42,12 +43,12 @@ def Main():
         print("Nous normalisons les données ...")
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
-        
+        '''
         # On split les adresses IP
-        df_split = sp.splitIp(df_total_csv_normalisee_DoH, 'SourceIP')
-        df_split = sp.splitIp(df_split, 'DestinationIP')
+        df_split = sp.IP2Int(df_total_csv_normalisee_DoH, 'SourceIP')
+        df_split = sp.IP2Int(df_split, 'DestinationIP')
         df_split.to_csv("DoH/df_total_csv_ipsplit_DoH.csv", sep=';', index=False)
-        
+        '''
         '''
         # Features importances
         df_feature_importances_DoH = fi.FeaturesImportances(df_total_csv_normalisee_DoH, colonne)
@@ -61,7 +62,7 @@ def Main():
         # Modele ML
         print("Nous démarrons les modèles de Machine Learning ...")
         # DTC Decision Tree Classifier
-        DTC_DoH = ml.DTC(df_split, colonne)
+        DTC_DoH = ml.DTC(df_total_csv_normalisee_DoH, colonne)
         filename_DTC_DoH = 'DoH/finalized_model_DTC_DoH.sav'
         pickle.dump(DTC_DoH, open(filename_DTC_DoH, 'wb'))
        
@@ -71,7 +72,7 @@ def Main():
         pickle.dump(RFC_DoH, open(filename_RFC_DoH, 'wb'))
         
         # XGB XGBoost Classifier        
-        XGB_DoH = ml.XGB(df_split, colonne)
+        XGB_DoH = ml.XGB(df_total_csv_normalisee_DoH, colonne)
         filename_XGB_DoH = 'DoH/finalized_model_XGB_DoH.sav'
         pickle.dump(XGB_DoH, open(filename_XGB_DoH, 'wb'))
         
@@ -84,6 +85,7 @@ def Main():
         df_benign = pd.read_csv("data/l2-benign.csv")
     
         df_total_csv_Intrusion = pd.concat([df_malicious,df_benign])
+        df_total_csv_Intrusion.reset_index(inplace=True)
     
         # Preparation des données
         print("Nous nettoyons les données ...")
@@ -94,12 +96,12 @@ def Main():
         print("Nous normalisons les données ...")
         df_total_csv_normalisee_Intrusion = nor.NormalizeDataset(df_total_csv_new_Intrusion)
         df_total_csv_normalisee_Intrusion.to_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';', index=False)
-        
+        '''
         # On split les adresses IP
-        df_split = sp.splitIp(df_total_csv_normalisee_Intrusion, 'SourceIP')
-        df_split = sp.splitIp(df_split, 'DestinationIP')
+        df_split = sp.IP2Int(df_total_csv_normalisee_Intrusion, 'SourceIP')
+        df_split = sp.IP2Int(df_split, 'DestinationIP')
         df_split.to_csv("Intrusion/df_total_csv_ipsplit_Intrusion.csv", sep=';', index=False)
-        
+        '''
         '''
         # Features importances
         df_feature_importances_Intrusion = fi.FeaturesImportances(df_split, colonne)
@@ -113,7 +115,7 @@ def Main():
         # Modele ML
         print("Nous démarrons les modèles de Machine Learning ... \n\n")
         # DTC Decision Tree Classifier
-        DTC_Intrusion = ml.DTC(df_split, colonne)
+        DTC_Intrusion = ml.DTC(df_total_csv_normalisee_Intrusion, colonne)
         filename_DTC_Intrusion = 'Intrusion/finalized_model_DTC_Intrusion.sav'
         pickle.dump(DTC_Intrusion, open(filename_DTC_Intrusion, 'wb'))
        
@@ -123,7 +125,7 @@ def Main():
         pickle.dump(RFC_Intrusion, open(filename_RFC_Intrusion, 'wb'))
         
         # XGB XGBoost Classifier        
-        XGB_Intrusion = ml.XGB(df_split, colonne)
+        XGB_Intrusion = ml.XGB(df_total_csv_normalisee_Intrusion, colonne)
         filename_XGB_Intrusion = 'Intrusion/finalized_model_XGB_Intrusion.sav'
         pickle.dump(XGB_Intrusion, open(filename_XGB_Intrusion, 'wb'))
         
