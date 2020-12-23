@@ -118,7 +118,7 @@ def Main():
         DTC_Intrusion = ml.DTC(df_total_csv_normalisee_Intrusion, colonne)
         filename_DTC_Intrusion = 'Intrusion/finalized_model_DTC_Intrusion.sav'
         pickle.dump(DTC_Intrusion, open(filename_DTC_Intrusion, 'wb'))
-       
+
         # RFC Random Forest Classifier
         RFC_Intrusion = ml.RFC(df_total_csv_normalisee_Intrusion, colonne)
         filename_RFC_Intrusion = 'Intrusion/finalized_model_RFC_Intrusion.sav'
