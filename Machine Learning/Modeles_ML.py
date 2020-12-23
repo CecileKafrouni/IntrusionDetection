@@ -54,7 +54,7 @@ def DTC_Randomized_Search(df, colonne):
     
 def DTC(df, colonne):
     
-    rs_dtc = DTC_Randomized_Search(df, colonne)
+    #rs_dtc = DTC_Randomized_Search(df, colonne)
     
     t_debut = time.time()
     print("Training Decision Tree Classifier Algo ...\n ")
@@ -64,8 +64,8 @@ def DTC(df, colonne):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
        
     # Create Decision Tree classifer object
-    DTC = DecisionTreeClassifier()
-    DTC.set_params(**rs_dtc.best_params_)
+    DTC = DecisionTreeClassifier(max_depth=3)
+    #DTC.set_params(**rs_dtc.best_params_)
     
     # Train Decision Tree Classifer
     DTC = DTC.fit(X_train,y_train)
@@ -128,7 +128,7 @@ def RFC_Randomized_Search(df, colonne):
 
 def RFC(df, colonne):
     
-    rs_rfc = RFC_Randomized_Search(df, colonne)
+    #rs_rfc = RFC_Randomized_Search(df, colonne)
     
     t_debut = time.time()
     print("Training Random Forest Classifier Algo ... \n")
@@ -139,8 +139,8 @@ def RFC(df, colonne):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     
     # Create Random Forest classifer object
-    RFC = RandomForestClassifier()
-    RFC.set_params(**rs_rfc.best_params_)
+    RFC = RandomForestClassifier(max_depth=80,n_estimators=100)
+    #RFC.set_params(**rs_rfc.best_params_)
     
     # Train Random Forest Classifer
     RFC = RFC.fit(X_train,y_train)
@@ -207,7 +207,7 @@ def XGBoost_Randomized_Search(df, colonne):
     
 def XGB(df, colonne):
     
-    rs_XGB = XGBoost_Randomized_Search(df, colonne)
+    #rs_XGB = XGBoost_Randomized_Search(df, colonne)
     
     t_debut = time.time()
     print("Training XGBoost Classifier Algo ... \n")
@@ -218,8 +218,8 @@ def XGB(df, colonne):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     
     # Create XGBoost Classifier model
-    XGB = xgb.XGBClassifier()
-    XGB.set_params(**rs_XGB.best_params_)
+    XGB = xgb.XGBClassifier(max_depth=6,n_estimators=100,objective="binary:logistic")
+    #XGB.set_params(**rs_XGB.best_params_)
     
     # Train XGBoost Classifer
     XGB = XGB.fit(X_train,y_train)
