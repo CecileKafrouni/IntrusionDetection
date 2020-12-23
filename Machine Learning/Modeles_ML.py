@@ -56,15 +56,20 @@ def DTC(df, colonne):
     
     #rs_dtc = DTC_Randomized_Search(df, colonne)
     
+    
     t_debut = time.time()
     print("Training Decision Tree Classifier Algo ...\n ")
+    # Create Decision Tree classifer object
+    DTC = DecisionTreeClassifier(max_depth=2,criterion='entropy')
+
+    #df = fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')
+    
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
        
-    # Create Decision Tree classifer object
-    DTC = DecisionTreeClassifier(max_depth=3)
+    
     #DTC.set_params(**rs_dtc.best_params_)
     
     # Train Decision Tree Classifer
@@ -132,14 +137,16 @@ def RFC(df, colonne):
     
     t_debut = time.time()
     print("Training Random Forest Classifier Algo ... \n")
-    
+    # Create Random Forest classifer object
+    RFC = RandomForestClassifier(max_depth=2)
+    df =fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     
     # Create Random Forest classifer object
-    RFC = RandomForestClassifier(max_depth=80,n_estimators=100)
+    #RFC = RandomForestClassifier()
     #RFC.set_params(**rs_rfc.best_params_)
     
     # Train Random Forest Classifer
@@ -156,7 +163,7 @@ def RFC(df, colonne):
     
     print("Temps pour RFClassifier (en sec): ", np.round(t_total,4))
 
-    fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
+    #fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
     roc.ROC_curve(df, colonne, RFC, 'Random Forest Classifier')
     cv.cross_validation(df, colonne, RFC, 'Random Forest Classifier')
     
@@ -211,14 +218,17 @@ def XGB(df, colonne):
     
     t_debut = time.time()
     print("Training XGBoost Classifier Algo ... \n")
+    # Create XGBoost Classifier model
+    XGB = xgb.XGBClassifier(objective="binary:logistic",min_child_weight=20)
+    df = fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
     
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
     
     # Create XGBoost Classifier model
-    XGB = xgb.XGBClassifier(max_depth=6,n_estimators=100,objective="binary:logistic")
+    #XGB = xgb.XGBClassifier(objective="binary:logistic")
     #XGB.set_params(**rs_XGB.best_params_)
     
     # Train XGBoost Classifer
@@ -234,7 +244,7 @@ def XGB(df, colonne):
     
     print("Temps pour XGBoost (en sec): ", np.round(t_total,4))
 
-    fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
+    #fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
     roc.ROC_curve(df, colonne, XGB, 'XGBoost Classifier')
     cv.cross_validation(df, colonne, XGB, 'XGBoost Classifier')
     
