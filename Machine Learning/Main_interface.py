@@ -29,24 +29,24 @@ loaded_model_DTC_Intrusion = pickle.load(open(filename_DTC_Intrusion, 'rb'))
 loaded_model_RFC_Intrusion = pickle.load(open(filename_RFC_Intrusion, 'rb'))
 loaded_model_XGB_Intrusion = pickle.load(open(filename_XGB_Intrusion, 'rb'))
 
-df_test=gui.interface(df,'DoH')
+button_value = gui.interface(df,'DoH')
 
-df_test = pd.read_csv("df_new.csv", sep=';')
+if(button_value == 'Ok'):
 
+    df_test = pd.read_csv("df_new.csv", sep=';')
+    
+    
+    pred_DTC_DoH = ml.DTC_Prediction(df_test, loaded_model_DTC_DoH)
+    pred_XGB_DoH = ml.XGB_Prediction(df_test, loaded_model_XGB_DoH)
+    pred_RFC_DoH = ml.RFC_Prediction(df_test, loaded_model_RFC_DoH)
+    
+    
+    gui.result(pred_DTC_DoH,pred_RFC_DoH,pred_XGB_DoH)
+    
 
-pred_DTC_DoH = ml.DTC_Prediction(df_test, loaded_model_DTC_DoH)
-pred_XGB_DoH = ml.XGB_Prediction(df_test, loaded_model_XGB_DoH)
-pred_RFC_DoH = ml.RFC_Prediction(df_test, loaded_model_RFC_DoH)
-
-
-gui.result(pred_DTC_DoH,pred_RFC_DoH,pred_XGB_DoH)
-
-
-
-
+'''
 pred_DTC_Intrusion = ml.DTC_Prediction(df_test, loaded_model_DTC_Intrusion)
 pred_RFC_Intrusion = ml.RFC_Prediction(df_test, loaded_model_RFC_Intrusion)
 pred_XGB_Intrusion = ml.XGB_Prediction(df_test, loaded_model_XGB_Intrusion)
-
-gui.result_intrusion(pred_DTC_Intrusion,pred_RFC_Intrusion,pred_XGB_Intrusion)
-
+'''
+#gui.result_intrusion(pred_DTC_Intrusion,pred_RFC_Intrusion,pred_XGB_Intrusion)
