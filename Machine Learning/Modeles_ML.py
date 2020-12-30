@@ -97,7 +97,7 @@ def DTC_Prediction(df, DTC):
     X_new_DTC = df
     # Predict and print the label for the new data point X_new
     new_prediction_DTC = DTC.predict(X_new_DTC)
-    print("New prediction knn: {}".format(new_prediction_DTC))
+    print("New prediction DTC: {}".format(new_prediction_DTC))
     return new_prediction_DTC
 
 ################################# RANDOM FOREST CLASSIFIER ###################################
@@ -139,7 +139,8 @@ def RFC(df, colonne):
     print("Training Random Forest Classifier Algo ... \n")
     # Create Random Forest classifer object
     RFC = RandomForestClassifier(max_depth=2)
-    df =fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')
+    
+    #df =fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -163,7 +164,7 @@ def RFC(df, colonne):
     
     print("Temps pour RFClassifier (en sec): ", np.round(t_total,4))
 
-    #fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
+    fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
     roc.ROC_curve(df, colonne, RFC, 'Random Forest Classifier')
     cv.cross_validation(df, colonne, RFC, 'Random Forest Classifier')
     
@@ -174,7 +175,7 @@ def RFC_Prediction(df, RFC):
     X_new_RFC = df
     # Predict and print the label for the new data point X_new
     new_prediction_RFC = RFC.predict(X_new_RFC)
-    print("New prediction knn: {}".format(new_prediction_RFC))
+    print("New prediction RFC: {}".format(new_prediction_RFC))
     return new_prediction_RFC
 
 #################################### XGBOOST CLASSIFIER ###########################################
@@ -219,8 +220,10 @@ def XGB(df, colonne):
     t_debut = time.time()
     print("Training XGBoost Classifier Algo ... \n")
     # Create XGBoost Classifier model
+    
     XGB = xgb.XGBClassifier(objective="binary:logistic",min_child_weight=20)
-    df = fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
+    
+    #df = fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
     
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
@@ -244,7 +247,7 @@ def XGB(df, colonne):
     
     print("Temps pour XGBoost (en sec): ", np.round(t_total,4))
 
-    #fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
+    fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
     roc.ROC_curve(df, colonne, XGB, 'XGBoost Classifier')
     cv.cross_validation(df, colonne, XGB, 'XGBoost Classifier')
     
@@ -255,5 +258,5 @@ def XGB_Prediction(df,XGB):
     X_new_XGB = df
     # Predict and print the label for the new data point X_new
     new_prediction_XGB = XGB.predict(X_new_XGB)
-    print("New prediction knn: {}".format(new_prediction_XGB))
+    print("New prediction XGB: {}".format(new_prediction_XGB))
     return new_prediction_XGB
