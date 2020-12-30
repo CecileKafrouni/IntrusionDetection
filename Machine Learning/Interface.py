@@ -15,8 +15,6 @@ def interface(df, target):
     sg.theme('DarkBlue3')   
     
     frame_layout = []
-    right_col = []
-    #left_col.append([sg.Text('Veuillez rentrer vos informations :')])
         
     #for i in range(0,len(liste_colonne)-1):
     for i in range(0,len(liste_colonne)):
@@ -37,60 +35,79 @@ def interface(df, target):
    
     
     window = sg.Window('Informations pour prediction', layout, size=(750,520))
+    
+    button_value=''
+    
     while (True):
-        
         event, values = window.read()
-        if event == sg.WIN_CLOSED or event == 'Cancel' : 
+        if event == sg.WIN_CLOSED or event == 'Cancel': 
+            button_value='Cancel'
+            window.close()
             break
-       
-        X_new = []
-        for j in range (0, len(liste_colonne)):
-            X_new.append(values[j])
-        print(X_new)
-    
-    features=[]
-    for i in range(0,len(liste_colonne)):
-        features.append(liste_colonne[i])
         
-    print(features)
+        elif event == 'Ok':
+            X_new = []
+            for j in range (0, len(liste_colonne)):
+                X_new.append(values[j])
+            features=[]
+            for i in range(0,len(liste_colonne)):
+                features.append(liste_colonne[i])
+                
+            df_new = pd.DataFrame([X_new], columns=features)
+            df_new.to_csv('df_new.csv', sep=';', index = False)
+            button_value='Ok'
+            window.close()
+            break
+    
+    
+    return button_value
+    
 
-    df_new = pd.DataFrame([X_new], columns=features)
-    df_new.to_csv('df_new.csv', sep=';', index = False)
-    
-    
-    window.close()
-    
-    return df_new
-    
 if __name__ == "__main__":
     interface()
     
+    
+    
 def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH):
     
+    compteur=0
+    
     if(pred_DTC_DoH == 1.0):
-        #resultat_DTC_DoH = 'nonDoH'
-        result_intrusion()
+        resultat_DTC_DoH = 'nonDoH'
+        compteur+=1
+        #result_intrusion()
     else:
         resultat_DTC_DoH = 'DoH'
     
     if(pred_RFC_DoH == 1.0):
-        #resultat_RFC_DoH = 'nonDoH'
-        result_intrusion()
+        resultat_RFC_DoH = 'nonDoH'
+        compteur+=1
+        #result_intrusion()
     else:
         resultat_RFC_DoH = 'DoH'
             
     if(pred_XGB_DoH == 1.0):
-        #resultat_XGB_DoH = 'nonDoH'
-        result_intrusion()
+        resultat_XGB_DoH = 'nonDoH'
+        compteur+=1
+        #result_intrusion()
     else:
         resultat_XGB_DoH = 'DoH'
        
-    sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
-             'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
-             'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH))
     
-def result_intrusion(pred_DTC_Intrusion, pred_RFC_Intrusion, pred_XGB_Intrusion):
+    if(compteur >= 2):
+        sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
+                 'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
+                 'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH))
+        result_intrusion()
+    else:
+        sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
+                 'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
+                 'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH))
     
+    
+    
+def result_intrusion():
+    '''
     if(pred_DTC_Intrusion == 1.0):
         resultat_DTC_Intrusion = 'Intrusion'
     else:
@@ -109,3 +126,5 @@ def result_intrusion(pred_DTC_Intrusion, pred_RFC_Intrusion, pred_XGB_Intrusion)
     sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_Intrusion),
              'Le resultat pour le RFC :{}'.format(resultat_RFC_Intrusion), 
              'Le resultat pour le XGB :{}'.format(resultat_XGB_Intrusion))
+    '''
+    sg.popup('OKKKKK')
