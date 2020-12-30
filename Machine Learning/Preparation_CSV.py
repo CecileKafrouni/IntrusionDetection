@@ -47,10 +47,10 @@ def rajouter_colonne(df, colonne) :
             z = z+1
         else:
             if(df.Label[z] == 'DoH'):
-                df[colonne][z] = 0
+                df[colonne][z] = 1
                 
             else :
-                df[colonne][z] = 1       
+                df[colonne][z] = 0       
             z = z+1
  
  
