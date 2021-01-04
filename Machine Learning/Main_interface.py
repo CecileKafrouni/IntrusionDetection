@@ -1,11 +1,18 @@
 '''
 ----------------------- MAIN INTERFACE ---------------------------
 '''
+import sys
 
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
+    
 import Modeles_ML as ml
+import Modeles_DL as dl
 import Interface as gui
 import pickle
 import pandas as pd
+from keras.models import load_model
 
 df = pd.read_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';')
 
@@ -21,13 +28,9 @@ loaded_model_XGB_DoH = pickle.load(open(filename_XGB_DoH, 'rb'))
 
 #Loading DL models for Intrusion
 
-filename_DTC_Intrusion = 'Intrusion/finalized_model_DTC_Intrusion.sav'
-filename_RFC_Intrusion = 'Intrusion/finalized_model_RFC_Intrusion.sav'
-filename_XGB_Intrusion = 'Intrusion/finalized_model_XGB_Intrusion.sav'
+filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_Intrusion.h5'
 
-loaded_model_DTC_Intrusion = pickle.load(open(filename_DTC_Intrusion, 'rb'))
-loaded_model_RFC_Intrusion = pickle.load(open(filename_RFC_Intrusion, 'rb'))
-loaded_model_XGB_Intrusion = pickle.load(open(filename_XGB_Intrusion, 'rb'))
+loaded_model_Simple_DL_Model_Intrusion = load_model(filename_Simple_DL_Model_Intrusion)
 
 button_value = gui.interface(df,'DoH')
 
@@ -40,8 +43,10 @@ if(button_value == 'Ok'):
     pred_XGB_DoH = ml.XGB_Prediction(df_test, loaded_model_XGB_DoH)
     pred_RFC_DoH = ml.RFC_Prediction(df_test, loaded_model_RFC_DoH)
     
+    pred_Simple_DL_Model_Intrusion = dl.DL_simple_Prediction(df_test, loaded_model_Simple_DL_Model_Intrusion)
     
-    gui.result(pred_DTC_DoH,pred_RFC_DoH,pred_XGB_DoH)
+    
+    gui.result(pred_DTC_DoH,pred_RFC_DoH,pred_XGB_DoH,pred_Simple_DL_Model_Intrusion)
     
 
 '''
