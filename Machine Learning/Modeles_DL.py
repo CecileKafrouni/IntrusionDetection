@@ -14,31 +14,46 @@ y = df['Intrusion']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
     
-def DL_simple(df):
-    X = df.drop(['Intrusion'], axis = 1)
-    y = df['Intrusion']
+def DL_simple(df, colonne):
+    X = df.drop([colonne], axis = 1)
+    y = df[colonne]
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
         
     
     # instantiate the model, add hidden and output layers
-    model2=Sequential()
-    model2.add(Dense(4, input_shape=(33,), activation='tanh'))
-    model2.add(Dense(1, activation='sigmoid'))
+    model=Sequential()
+    model.add(Dense(4, input_shape=(33,), activation='tanh'))
+    model.add(Dense(1, activation='sigmoid'))
     
-    # 
+    
     # compile and summarize the model
-    model2.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
-    model2.summary()
+    model.compile(loss='binary_crossentropy', optimizer='sgd', metrics=['accuracy'])
+    model.summary()
     
     # train the model
-    model2.fit(X_train, y_train, epochs=3)
+    model.fit(X_train, y_train, epochs=3)
     
     # evaluate the model accuracy on test data
-    print('model accuracy on test data: ', np.round(model2.evaluate(X_test, y_test, verbose=0)[1],4))
+    print('model accuracy on test data: ', np.round(model.evaluate(X_test, y_test, verbose=0)[1],4))
+    
+    model.save('Intrusion/finalized_model_Simple_DL_Model_Intrusion.h5')
+    
+    return model
+
+def DL_simple_Prediction(df, DL_simple): 
+    
+    X_new_DL_simple = df
+    new_prediction_DL_simple = DL_simple.predict(X_new_DL_simple)
+    new_prediction_DL_simple = np.round(new_prediction_DL_simple)
+    
+    print("New prediction DLsimple model: {}".format(new_prediction_DL_simple))
+    return new_prediction_DL_simple
 
 
-#DL_simple(df)
+
+
+
 
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import RandomizedSearchCV 
