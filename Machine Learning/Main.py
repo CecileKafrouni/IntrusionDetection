@@ -19,6 +19,7 @@ import feature_importances as fi
 import Normalisation_donnees as nor
 import Correlation as cor
 import Modeles_ML as ml
+import Modeles_DL as dl
 import Split as sp
 
 def Main():
@@ -111,8 +112,8 @@ def Main():
         df_correlation_Intrusion = cor.Correlation(df_split, colonne)
         df_correlation_Intrusion.to_csv("Intrusion/df_correlation_Intrusion.csv", sep=';', index=False)
         '''
-        
-        # Modele ML
+        '''
+        # Modeles ML
         print("Nous démarrons les modèles de Machine Learning ... \n\n")
         # DTC Decision Tree Classifier
         DTC_Intrusion = ml.DTC(df_total_csv_normalisee_Intrusion, colonne)
@@ -128,6 +129,12 @@ def Main():
         XGB_Intrusion = ml.XGB(df_total_csv_normalisee_Intrusion, colonne)
         filename_XGB_Intrusion = 'Intrusion/finalized_model_XGB_Intrusion.sav'
         pickle.dump(XGB_Intrusion, open(filename_XGB_Intrusion, 'wb'))
+        '''
+        # Modeles DL
+        
+        Simple_DL_Model_Intrusion = dl.DTC(df_total_csv_normalisee_Intrusion, 'Intrusion')
+        filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_Intrusion.sav'
+        pickle.dump(Simple_DL_Model_Intrusion, open(filename_Simple_DL_Model_Intrusion, 'wb'))
         
     else:
         print('\nVous n\' avez pas bien répondu à la question, réessayez svp')
@@ -135,3 +142,15 @@ def Main():
 
 # On appelle notre fonction main
 Main()
+
+
+
+
+
+
+
+
+
+
+
+
