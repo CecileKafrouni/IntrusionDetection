@@ -66,9 +66,7 @@ def interface(df, target):
 if __name__ == "__main__":
     interface()
     
-    
-    
-def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH):
+def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_Simple_DL_Model_Intrusion):
     
     compteur=0
     
@@ -93,38 +91,21 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH):
     else:
         resultat_XGB_DoH = 'DoH'
        
-    
     if(compteur >= 2):
         sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
                  'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
                  'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH))
-        result_intrusion()
+        result_intrusion(pred_Simple_DL_Model_Intrusion)
     else:
         sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
                  'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
                  'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH))
     
+def result_intrusion(pred_model):
     
-    
-def result_intrusion():
-    '''
-    if(pred_DTC_Intrusion == 1.0):
-        resultat_DTC_Intrusion = 'Intrusion'
+    if(pred_model == 1.0):
+        resultat_Simple_DL_Model_Intrusion = 'Intrusion'
     else:
-        resultat_DTC_Intrusion = 'Begnin'
-    
-    if(pred_RFC_Intrusion == 1.0):
-        resultat_RFC_Intrusion = 'Intrusion'
-    else:
-        resultat_RFC_Intrusion = 'Begnin'
-    
-    if(pred_XGB_Intrusion == 1.0):
-        resultat_XGB_Intrusion = 'Intrusion'
-    else:
-        resultat_XGB_Intrusion = 'Begnin'
+        resultat_Simple_DL_Model_Intrusion = 'Begnin'
         
-    sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_Intrusion),
-             'Le resultat pour le RFC :{}'.format(resultat_RFC_Intrusion), 
-             'Le resultat pour le XGB :{}'.format(resultat_XGB_Intrusion))
-    '''
-    sg.popup('OKKKKK')
+    sg.popup('Resultat', 'Le resultat pour le model de DL simple : {}'.format(resultat_Simple_DL_Model_Intrusion))
