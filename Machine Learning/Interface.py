@@ -16,7 +16,6 @@ def interface(df, target):
     
     frame_layout = []
         
-    #for i in range(0,len(liste_colonne)-1):
     for i in range(0,len(liste_colonne)):
         frame_layout.append([sg.Text(liste_colonne[i], size=(30, 1)), 
                        sg.InputText(default_text = 0,size=(10,1))])
@@ -26,7 +25,6 @@ def interface(df, target):
                      sg.VerticalSeparator(pad=None),
                      sg.Column(frame_layout[int(len(liste_colonne)/2)+1:len(liste_colonne)], element_justification='c')]
                     ]
-    #frame_layout.append([sg.Button('Ok'), sg.Button('Cancel')])
 
     layout = [
               [sg.Frame('Veuillez rentrer vos informations', frame_layout, font=15)],
@@ -73,21 +71,18 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_Simple_DL_Model_Intrusi
     if(pred_DTC_DoH == 1.0):
         resultat_DTC_DoH = 'nonDoH'
         compteur+=1
-        #result_intrusion()
     else:
         resultat_DTC_DoH = 'DoH'
     
     if(pred_RFC_DoH == 1.0):
         resultat_RFC_DoH = 'nonDoH'
         compteur+=1
-        #result_intrusion()
     else:
         resultat_RFC_DoH = 'DoH'
             
     if(pred_XGB_DoH == 1.0):
         resultat_XGB_DoH = 'nonDoH'
         compteur+=1
-        #result_intrusion()
     else:
         resultat_XGB_DoH = 'DoH'
        
