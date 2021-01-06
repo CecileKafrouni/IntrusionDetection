@@ -1,10 +1,16 @@
+# -*- coding: utf-8 -*-
+
+'''
+------------------------------ Modeles de Machine Learning -----------------------------------
+'''
+
+
 # Functions
 import feature_importances as fi
 import ROC_curve as roc
 import cross_validation as cv
 
 #Math modules
-import pandas as pd
 import numpy as np
 import time
 from scipy.stats import randint
@@ -62,8 +68,6 @@ def DTC(df, colonne):
     # Create Decision Tree classifer object
     DTC = DecisionTreeClassifier(max_depth=2,criterion='entropy')
 
-    #df = fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')
-    
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -78,6 +82,8 @@ def DTC(df, colonne):
     
     y_pred_DTC = DTC.predict(X_test)
     
+    # Metriques du Decision Tree Classifier
+    
     print('\tReport Decision Tree Classifier \n\n', classification_report(y_test, y_pred_DTC))
     
     t_fin = time.time()
@@ -85,6 +91,7 @@ def DTC(df, colonne):
     t_total = t_fin - t_debut
     
     print("Temps pour DTClassifier (en sec): ", np.round(t_total,4))
+    
     
     fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
     roc.ROC_curve(df, colonne, DTC, 'Decision Tree Classifier')
@@ -140,7 +147,6 @@ def RFC(df, colonne):
     # Create Random Forest classifer object
     RFC = RandomForestClassifier(max_depth=2)
     
-    #df =fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -155,6 +161,8 @@ def RFC(df, colonne):
     
     
     y_pred_RFC = RFC.predict(X_test)
+    
+    # Metriques du Random Forest Classifier
     
     print('\t Report Random Forest Classifier \n\n', classification_report(y_test, y_pred_RFC))
     
@@ -223,8 +231,6 @@ def XGB(df, colonne):
     
     XGB = xgb.XGBClassifier(objective="binary:logistic",min_child_weight=20)
     
-    #df = fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
-    
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -238,6 +244,8 @@ def XGB(df, colonne):
     XGB = XGB.fit(X_train,y_train)
     
     y_pred_XGB = XGB.predict(X_test)
+    
+    # Metriques du XGBoost Classifier
     
     print('\tReport XGBoost Classifier \n\n', classification_report(y_test, y_pred_XGB))
     
@@ -254,7 +262,7 @@ def XGB(df, colonne):
     return XGB
 
 def XGB_Prediction(df,XGB): 
-    
+
     X_new_XGB = df
     # Predict and print the label for the new data point X_new
     new_prediction_XGB = XGB.predict(X_new_XGB)
