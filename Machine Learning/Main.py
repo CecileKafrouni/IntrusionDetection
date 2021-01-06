@@ -115,7 +115,7 @@ def Main():
         '''
         # Modeles DL
         
-        Simple_DL_Model_Intrusion = dl.DTC(df_total_csv_normalisee_Intrusion, 'Intrusion')
+        Simple_DL_Model_Intrusion = dl.DL_simple(df_total_csv_normalisee_Intrusion, 'Intrusion')
         filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_Intrusion.sav'
         pickle.dump(Simple_DL_Model_Intrusion, open(filename_Simple_DL_Model_Intrusion, 'wb'))
         
@@ -125,9 +125,6 @@ def Main():
 
 # On appelle notre fonction main
 Main()
-
-
-
 
 
 
