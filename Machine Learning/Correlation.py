@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
+'''
+------------------------------ Correlation -----------------------------------
+'''
+
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
 def Correlation(df, colonne):
-    #X = df.drop(['Intrusion','SourceIP','DestinationIP'], axis = 1)
-    #y = df['Intrusion']
-    #X.astype(np.float32)
-    
+   
     plt.figure(figsize=(12,10))
     cor = df.corr()
     sns.heatmap(cor, annot=True, cmap=plt.cm.Reds)
     plt.show()
     
-    #Correlation with output variable
-    cor_target = abs(cor[colonne]) #Selecting highly correlated features
+    cor_target = abs(cor[colonne])
     
     relevant_features = cor_target[cor_target>0.1]
      
