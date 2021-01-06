@@ -68,19 +68,19 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_Simple_DL_Model_Intrusi
     
     compteur=0
     
-    if(pred_DTC_DoH == 1.0):
+    if(pred_DTC_DoH == 0):
         resultat_DTC_DoH = 'nonDoH'
         compteur+=1
     else:
         resultat_DTC_DoH = 'DoH'
     
-    if(pred_RFC_DoH == 1.0):
+    if(pred_RFC_DoH == 0):
         resultat_RFC_DoH = 'nonDoH'
         compteur+=1
     else:
         resultat_RFC_DoH = 'DoH'
             
-    if(pred_XGB_DoH == 1.0):
+    if(pred_XGB_DoH == 0):
         resultat_XGB_DoH = 'nonDoH'
         compteur+=1
     else:
