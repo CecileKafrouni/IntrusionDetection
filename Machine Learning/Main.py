@@ -14,13 +14,12 @@ if not sys.warnoptions:
 import pandas as pd
 import pickle
 
-import Preparation_CSV as pc        
-import feature_importances as fi
+import Preparation_CSV as pc      
 import Normalisation_donnees as nor
-import Correlation as cor
+#import Correlation as cor
 import Modeles_ML as ml
 import Modeles_DL as dl
-import Split as sp
+
 
 def Main():
     reponse = input('Bonjour, que voulez vous tester ? \n A. DoH \n B. Intrusion \n\n')
@@ -44,17 +43,9 @@ def Main():
         print("Nous normalisons les données ...")
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
-        '''
-        # On split les adresses IP
-        df_split = sp.IP2Int(df_total_csv_normalisee_DoH, 'SourceIP')
-        df_split = sp.IP2Int(df_split, 'DestinationIP')
-        df_split.to_csv("DoH/df_total_csv_ipsplit_DoH.csv", sep=';', index=False)
-        '''
-        '''
-        # Features importances
-        df_feature_importances_DoH = fi.FeaturesImportances(df_total_csv_normalisee_DoH, colonne)
-        df_feature_importances_DoH.to_csv("DoH/df_feature_importances_DoH.csv", sep=';', index=False)
         
+
+        '''
         # Correlation
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
         df_correlation_DoH.to_csv("DoH/df_correlation_DoH.csv", sep=';', index=False)
@@ -97,17 +88,9 @@ def Main():
         print("Nous normalisons les données ...")
         df_total_csv_normalisee_Intrusion = nor.NormalizeDataset(df_total_csv_new_Intrusion)
         df_total_csv_normalisee_Intrusion.to_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';', index=False)
+        
         '''
-        # On split les adresses IP
-        df_split = sp.IP2Int(df_total_csv_normalisee_Intrusion, 'SourceIP')
-        df_split = sp.IP2Int(df_split, 'DestinationIP')
-        df_split.to_csv("Intrusion/df_total_csv_ipsplit_Intrusion.csv", sep=';', index=False)
-        '''
-        '''
-        # Features importances
-        df_feature_importances_Intrusion = fi.FeaturesImportances(df_split, colonne)
-        df_feature_importances_Intrusion.to_csv("Intrusion/df_feature_importances_Intrusion.csv", sep=';', index=False)
-    
+
         # Correlation
         df_correlation_Intrusion = cor.Correlation(df_split, colonne)
         df_correlation_Intrusion.to_csv("Intrusion/df_correlation_Intrusion.csv", sep=';', index=False)
