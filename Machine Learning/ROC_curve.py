@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+'''
+------------------------------ ROC Curve -----------------------------------
+'''
+
 import matplotlib.pyplot as plt
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
@@ -13,8 +19,6 @@ def ROC_curve(df, colonne, model, model_name):
     preds = probs[:,1]
     fpr, tpr, threshold = metrics.roc_curve(y_test, preds)
     roc_auc = metrics.auc(fpr, tpr)
-    
-    # method I: plt
     
     plt.title('Receiver Operating Characteristic for ' + model_name)
     plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
