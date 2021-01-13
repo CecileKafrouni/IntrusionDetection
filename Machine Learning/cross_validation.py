@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+'''
+------------------------------ Cross validation -----------------------------------
+'''
+
 from sklearn.model_selection import cross_val_score
 
 def cross_validation(df, colonne, model, model_name):

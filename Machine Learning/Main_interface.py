@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 '''
 ----------------------- MAIN INTERFACE ---------------------------
 '''
@@ -32,26 +34,21 @@ filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_
 
 loaded_model_Simple_DL_Model_Intrusion = load_model(filename_Simple_DL_Model_Intrusion)
 
+
+# On appelle l'interface principale
 button_value = gui.interface(df,'DoH')
 
 if(button_value == 'Ok'):
 
     df_test = pd.read_csv("df_new.csv", sep=';')
     
-    
+    # Stocke predictions
     pred_DTC_DoH = ml.DTC_Prediction(df_test, loaded_model_DTC_DoH)
     pred_XGB_DoH = ml.XGB_Prediction(df_test, loaded_model_XGB_DoH)
     pred_RFC_DoH = ml.RFC_Prediction(df_test, loaded_model_RFC_DoH)
     
     pred_Simple_DL_Model_Intrusion = dl.DL_simple_Prediction(df_test, loaded_model_Simple_DL_Model_Intrusion)
     
-    
+    # Pop up
     gui.result(pred_DTC_DoH,pred_RFC_DoH,pred_XGB_DoH,pred_Simple_DL_Model_Intrusion)
-    
 
-'''
-pred_DTC_Intrusion = ml.DTC_Prediction(df_test, loaded_model_DTC_Intrusion)
-pred_RFC_Intrusion = ml.RFC_Prediction(df_test, loaded_model_RFC_Intrusion)
-pred_XGB_Intrusion = ml.XGB_Prediction(df_test, loaded_model_XGB_Intrusion)
-'''
-#gui.result_intrusion(pred_DTC_Intrusion,pred_RFC_Intrusion,pred_XGB_Intrusion)

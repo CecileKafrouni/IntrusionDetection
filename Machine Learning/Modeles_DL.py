@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 
+'''
+------------------------------ Modeles de Deep Learning -----------------------------------
+'''
+
 from keras.models import Sequential
 from keras.layers import Dense
 import numpy as np
 import pandas as pd
+
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import RandomizedSearchCV 
+from sklearn.model_selection import cross_val_score 
+from keras.layers import LeakyReLU
+
 
 from sklearn.model_selection import train_test_split
 
@@ -50,15 +60,6 @@ def DL_simple_Prediction(df, DL_simple):
     print("New prediction DLsimple model: {}".format(new_prediction_DL_simple))
     return new_prediction_DL_simple
 
-
-
-
-
-
-from keras.wrappers.scikit_learn import KerasClassifier
-from sklearn.model_selection import RandomizedSearchCV 
-from sklearn.model_selection import cross_val_score 
-from keras.layers import LeakyReLU
 
 def create_model(first_layer_activation, hidden_layer_activation, neurons, number_of_layers):
      
