@@ -4,7 +4,6 @@
 ------------------------------ Modeles de Machine Learning -----------------------------------
 '''
 
-
 # Functions
 import feature_importances as fi
 import ROC_curve as roc
@@ -19,12 +18,12 @@ from scipy.stats import randint
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import classification_report
+from imblearn.over_sampling import SMOTE
 
 #Models
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
-
 
 ################################# DECISION TREE CLASSIFIER ####################################
 
@@ -34,12 +33,13 @@ def DTC_Randomized_Search(df, colonne):
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+    oversample = SMOTE()
+    X_smote, y_smote = oversample.fit_sample(X, y)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
     
     # Setup the parameters and distributions to sample from: param_dist
-    param_grid = {"max_depth": [3, None],
-                  "max_features": randint(1, 9),
-                  "min_samples_leaf": randint(1, 9),
+    param_grid = {"max_depth": [2, None],
                   "criterion": ["gini", "entropy"]}
     
     # Instantiate a Decision Tree classifier: tree
@@ -56,30 +56,30 @@ def DTC_Randomized_Search(df, colonne):
     print("Le meilleur score est : {} \n".format(np.round(rs_dtc.best_score_,4)))
     
     return rs_dtc
-    
-    
+       
 def DTC(df, colonne):
     
     #rs_dtc = DTC_Randomized_Search(df, colonne)
-    
-    
+       
     t_debut = time.time()
     print("Training Decision Tree Classifier Algo ...\n ")
     # Create Decision Tree classifer object
-    DTC = DecisionTreeClassifier(max_depth=2,criterion='entropy')
+    DTC = DecisionTreeClassifier(max_depth=1)
 
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
-       
+    oversample = SMOTE()
+    X_smote, y_smote = oversample.fit_sample(X, y)
     
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=42)
+       
+    print(X_test[:20])
     #DTC.set_params(**rs_dtc.best_params_)
     
     # Train Decision Tree Classifer
     DTC = DTC.fit(X_train,y_train)
-    
-    
+       
     y_pred_DTC = DTC.predict(X_test)
     
     # Metriques du Decision Tree Classifier
@@ -91,9 +91,8 @@ def DTC(df, colonne):
     t_total = t_fin - t_debut
     
     print("Temps pour DTClassifier (en sec): ", np.round(t_total,4))
-    
-    
-    fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
+        
+    #fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
     roc.ROC_curve(df, colonne, DTC, 'Decision Tree Classifier')
     cv.cross_validation(df, colonne, DTC, 'Decision Tree Classifier')
         
@@ -150,7 +149,10 @@ def RFC(df, colonne):
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+    oversample = SMOTE()
+    X_smote, y_smote = oversample.fit_sample(X, y)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.3, random_state=1)
     
     # Create Random Forest classifer object
     #RFC = RandomForestClassifier()
@@ -158,8 +160,7 @@ def RFC(df, colonne):
     
     # Train Random Forest Classifer
     RFC = RFC.fit(X_train,y_train)
-    
-    
+        
     y_pred_RFC = RFC.predict(X_test)
     
     # Metriques du Random Forest Classifier
@@ -172,7 +173,7 @@ def RFC(df, colonne):
     
     print("Temps pour RFClassifier (en sec): ", np.round(t_total,4))
 
-    fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
+    #fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
     roc.ROC_curve(df, colonne, RFC, 'Random Forest Classifier')
     cv.cross_validation(df, colonne, RFC, 'Random Forest Classifier')
     
@@ -208,8 +209,7 @@ def XGBoost_Randomized_Search(df, colonne):
             'gamma': [0, 0.25, 0.5, 1.0],
             'reg_lambda': [0.1, 1.0, 5.0, 10.0, 50.0, 100.0],
             'n_estimators': [100]}
-
-    
+   
     rs_XGB = RandomizedSearchCV(XGB, param_grid, n_iter=20,
                                 n_jobs=1, verbose=0, cv=2,
                                 scoring='neg_log_loss', refit=False, random_state=42)
@@ -234,7 +234,10 @@ def XGB(df, colonne):
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+    oversample = SMOTE()
+    X_smote, y_smote = oversample.fit_sample(X, y)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
     
     # Create XGBoost Classifier model
     #XGB = xgb.XGBClassifier(objective="binary:logistic")
@@ -255,7 +258,7 @@ def XGB(df, colonne):
     
     print("Temps pour XGBoost (en sec): ", np.round(t_total,4))
 
-    fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
+    #fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
     roc.ROC_curve(df, colonne, XGB, 'XGBoost Classifier')
     cv.cross_validation(df, colonne, XGB, 'XGBoost Classifier')
     
