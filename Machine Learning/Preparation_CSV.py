@@ -41,10 +41,10 @@ def rajouter_colonne(df, colonne) :
             z = z+1
         else:
             if(df.Label[z] == 'DoH'):
-                df[colonne][z] = 1
+                df[colonne][z] = 0
                 
             else :
-                df[colonne][z] = 0       
+                df[colonne][z] = 1       
             z = z+1
     
 def supprimer_colonne_vide(df) :
@@ -68,7 +68,7 @@ def equilibrage_donnees(df, colonne):
     
     # Equilibrage
     oversample = SMOTE()
-    X, y = oversample.fit_resample(X, y)
+    X, y = oversample.fit_sample(X, y)
     
     # Nouveau compteur apres equilibrage des donnees
     counter = Counter(y)
