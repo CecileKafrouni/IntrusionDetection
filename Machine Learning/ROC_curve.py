@@ -7,13 +7,17 @@
 import matplotlib.pyplot as plt
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import SMOTE
 
 def ROC_curve(df, colonne, model, model_name):
     
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+    oversample = SMOTE()
+    X_smote, y_smote = oversample.fit_sample(X, y)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
     
     probs = model.predict_proba(X_test)
     preds = probs[:,1]
