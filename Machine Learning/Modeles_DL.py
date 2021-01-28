@@ -88,11 +88,9 @@ params = {'first_layer_activation':['relu', 'tanh', 'LeakyReLU'],
           'neurons':[32,64,128],
           'number_of_layers':[2,4,6]}
 
- 
 #random_search = RandomizedSearchCV(skmodel, param_distributions=params, cv=3, n_jobs=-1)
 #random_search_results = random_search.fit(X_train, y_train, verbose=0) 
 #print("Best: {} using {}".format(np.round(random_search_results.best_score_,4), random_search_results.best_params_))
-
 
 def DL_optimized(df):
     
