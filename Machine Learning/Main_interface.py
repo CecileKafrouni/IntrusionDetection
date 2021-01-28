@@ -34,7 +34,6 @@ filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_
 
 loaded_model_Simple_DL_Model_Intrusion = load_model(filename_Simple_DL_Model_Intrusion)
 
-
 # On appelle l'interface principale
 button_value = gui.interface(df,'DoH')
 
@@ -51,4 +50,3 @@ if(button_value == 'Ok'):
     
     # Pop up
     gui.result(pred_DTC_DoH,pred_RFC_DoH,pred_XGB_DoH,pred_Simple_DL_Model_Intrusion)
-
