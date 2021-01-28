@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 '''
 ------------------------------ Main -----------------------------------
 '''
@@ -19,7 +18,6 @@ import Normalisation_donnees as nor
 #import Correlation as cor
 import Modeles_ML as ml
 import Modeles_DL as dl
-
 
 def Main():
     reponse = input('Bonjour, que voulez vous tester ? \n A. DoH \n B. Intrusion \n\n')
@@ -44,7 +42,6 @@ def Main():
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
         
-
         '''
         # Correlation
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
@@ -66,8 +63,7 @@ def Main():
         # XGB XGBoost Classifier        
         XGB_DoH = ml.XGB(df_total_csv_normalisee_DoH, colonne)
         filename_XGB_DoH = 'DoH/finalized_model_XGB_DoH.sav'
-        pickle.dump(XGB_DoH, open(filename_XGB_DoH, 'wb'))
-        
+        pickle.dump(XGB_DoH, open(filename_XGB_DoH, 'wb'))   
         
     elif(reponse == 'B'):
         print('\nVous avez répondu B, c\'est parti pour Intrusion\n')
@@ -83,6 +79,7 @@ def Main():
         print("Nous nettoyons les données ...")
         df_total_csv_new_Intrusion = pc.Preparation_CSV(df_total_csv_Intrusion, colonne)
         df_total_csv_new_Intrusion.to_csv("Intrusion/total_csv_copy_Intrusion.csv", sep=';', index=False)
+        print('Number of values in Intrusion feature: \n',df_total_csv_new_Intrusion[colonne].value_counts())
         
         # On normalise les données pour les modèles de ML au cas ou
         print("Nous normalisons les données ...")
@@ -90,7 +87,6 @@ def Main():
         df_total_csv_normalisee_Intrusion.to_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';', index=False)
         
         '''
-
         # Correlation
         df_correlation_Intrusion = cor.Correlation(df_split, colonne)
         df_correlation_Intrusion.to_csv("Intrusion/df_correlation_Intrusion.csv", sep=';', index=False)
@@ -115,7 +111,7 @@ def Main():
         '''
         # Modeles DL
         
-        Simple_DL_Model_Intrusion = dl.DL_simple(df_total_csv_normalisee_Intrusion, 'Intrusion')
+        Simple_DL_Model_Intrusion = dl.DTC(df_total_csv_normalisee_Intrusion, 'Intrusion')
         filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_Intrusion.sav'
         pickle.dump(Simple_DL_Model_Intrusion, open(filename_Simple_DL_Model_Intrusion, 'wb'))
         
@@ -127,10 +123,16 @@ def Main():
 Main()
 
 
+import pandas as pd
+import Modeles_ML as ml
+
+
+df_total_csv_new_Intrusion = pd.read_csv("Intrusion/total_csv_copy_Intrusion.csv", sep=';')
+
+DTC_DoH = ml.DTC(df_total_csv_new_Intrusion, 'Intrusion')
+RFC_DoH = ml.RFC(df_total_csv_new_Intrusion, 'Intrusion')
+XGB_DoH = ml.XGB(df_total_csv_new_Intrusion, 'Intrusion')
 
 
 
-
-
-
-
+df = pd.read_csv("Intrusion/total_csv_copy_Intrusion.csv", sep=';')
