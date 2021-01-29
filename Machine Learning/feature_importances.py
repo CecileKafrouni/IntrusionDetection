@@ -37,7 +37,7 @@ def FeaturesImportances(df, colonne, model, model_name):
     importances_sorted3.plot(kind='barh', color='red', title=model_name +'- Features importance 3/3')
     plt.show()
     
-    
+    '''
     feature_importances = pd.DataFrame(model_FI.feature_importances_, index = X_smote.columns, columns=[colonne]).sort_values(colonne,ascending=False)
     
     df_copy = df.copy()
@@ -49,3 +49,4 @@ def FeaturesImportances(df, colonne, model, model_name):
             
   
     return df_copy
+    '''
