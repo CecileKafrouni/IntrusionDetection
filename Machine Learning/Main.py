@@ -38,12 +38,12 @@ def Main():
         df_total_csv_new_DoH = pc.Preparation_CSV(df_total_csv_DoH, colonne)
         df_total_csv_new_DoH.to_csv("DoH/total_csv_copy_DoH.csv", sep=';', index=False)
 
-        '''
+        
         # On normalise les données pour les modèles de ML au cas ou
         print("Nous normalisons les données ...")
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
-        
+        '''
         # Correlation
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
         df_correlation_DoH.to_csv("DoH/df_correlation_DoH.csv", sep=';', index=False)
@@ -68,17 +68,17 @@ def Main():
         
         # Modeles ML autres
          # GNB Gaussian Naives Bayes
-        GNB_DoH = ml_bis.GNB(df_total_csv_new_DoH, colonne)
+        GNB_DoH = ml_bis.GNB(df_total_csv_normalisee_DoH, colonne)
         filename_GNB_DoH = 'DoH/finalized_model_GNB_DoH.sav'
         pickle.dump(GNB_DoH, open(filename_GNB_DoH, 'wb'))
        
         # KNN KNeighbors Classifier
-        KNN_DoH = ml_bis.KNN(df_total_csv_new_DoH, colonne)
+        KNN_DoH = ml_bis.KNN(df_total_csv_normalisee_DoH, colonne)
         filename_KNN_DoH = 'DoH/finalized_model_KNN_DoH.sav'
         pickle.dump(KNN_DoH, open(filename_KNN_DoH, 'wb'))
         
         # SVM Support Vector Machine        
-        SVM_DoH = ml_bis.SVM(df_total_csv_new_DoH, colonne)
+        SVM_DoH = ml_bis.SVM(df_total_csv_normalisee_DoH, colonne)
         filename_SVM_DoH = 'DoH/finalized_model_SVM_DoH.sav'
         pickle.dump(SVM_DoH, open(filename_SVM_DoH, 'wb'))   
         
