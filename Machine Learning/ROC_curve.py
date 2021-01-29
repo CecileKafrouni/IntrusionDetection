@@ -33,3 +33,4 @@ def ROC_curve(df, colonne, model, model_name):
     plt.ylabel('True Positive Rate')
     plt.xlabel('False Positive Rate')
     plt.show()
+    
