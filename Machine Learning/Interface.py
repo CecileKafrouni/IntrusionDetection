@@ -63,7 +63,7 @@ def interface(df, target):
 if __name__ == "__main__":
     interface()
     
-def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_Simple_DL_Model_Intrusion):
+def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_Simple_DL_Model_Intrusion,pred_GNB_DoH,pred_KNN_DoH, pred_SVM_DoH):
     
     compteur=0
     
@@ -85,15 +85,43 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_Simple_DL_Model_Intrusi
     else:
         resultat_XGB_DoH = 'DoH'
        
+        
+    if(pred_GNB_DoH == 1.0):
+        resultat_GNB_DoH = 'nonDoH'
+        compteur+=1
+    else:
+        resultat_GNB_DoH = 'DoH'
+        
+    if(pred_KNN_DoH == 1.0):
+        resultat_KNN_DoH = 'nonDoH'
+        compteur+=1
+    else:
+        resultat_KNN_DoH = 'DoH'
+    
+    if(pred_SVM_DoH == 1.0):
+        resultat_SVM_DoH = 'nonDoH'
+        compteur+=1
+    else:
+        resultat_SVM_DoH = 'DoH'
+    
+    
     if(compteur >= 2):
         sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
                  'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
-                 'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH))
+                 'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH),
+                 
+                 'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
+                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
+                 'Le resultat pour le SVM :{}'.format(resultat_SVM_DoH))
         result_intrusion(pred_Simple_DL_Model_Intrusion)
     else:
         sg.popup('Resultat', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
                  'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
-                 'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH))
+                 'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH),
+                 
+                 'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
+                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
+                 'Le resultat pour le SVM :{}'.format(resultat_SVM_DoH))
     
 def result_intrusion(pred_model):
     
