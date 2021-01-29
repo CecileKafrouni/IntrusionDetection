@@ -12,7 +12,6 @@ import cross_validation as cv
 #Math modules
 import numpy as np
 import time
-from scipy.stats import randint
 
 #Models tools
 from sklearn.model_selection import train_test_split
@@ -74,7 +73,6 @@ def DTC(df, colonne):
     
     X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=42)
        
-    print(X_test[:20])
     #DTC.set_params(**rs_dtc.best_params_)
     
     # Train Decision Tree Classifer
@@ -92,7 +90,7 @@ def DTC(df, colonne):
     
     print("Temps pour DTClassifier (en sec): ", np.round(t_total,4))
         
-    #fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
+    fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
     roc.ROC_curve(df, colonne, DTC, 'Decision Tree Classifier')
     cv.cross_validation(df, colonne, DTC, 'Decision Tree Classifier')
         
@@ -173,7 +171,7 @@ def RFC(df, colonne):
     
     print("Temps pour RFClassifier (en sec): ", np.round(t_total,4))
 
-    #fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
+    fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
     roc.ROC_curve(df, colonne, RFC, 'Random Forest Classifier')
     cv.cross_validation(df, colonne, RFC, 'Random Forest Classifier')
     
@@ -258,7 +256,7 @@ def XGB(df, colonne):
     
     print("Temps pour XGBoost (en sec): ", np.round(t_total,4))
 
-    #fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
+    fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
     roc.ROC_curve(df, colonne, XGB, 'XGBoost Classifier')
     cv.cross_validation(df, colonne, XGB, 'XGBoost Classifier')
     
