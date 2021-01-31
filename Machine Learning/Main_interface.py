@@ -17,6 +17,8 @@ import pickle
 import pandas as pd
 from keras.models import load_model
 
+import Normalisation_donnees as nor
+
 df = pd.read_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';')
 
 #Loading ML models for DoH
@@ -55,9 +57,10 @@ if(button_value == 'Ok'):
     pred_XGB_DoH = ml.XGB_Prediction(df_test, loaded_model_XGB_DoH)
     pred_RFC_DoH = ml.RFC_Prediction(df_test, loaded_model_RFC_DoH)
     
-    pred_GNB_DoH = ml_bis.GNB_Prediction(df_test, loaded_model_GNB_DoH)
-    pred_KNN_DoH = ml_bis.KNN_Prediction(df_test, loaded_model_KNN_DoH)
-    pred_SVM_DoH = ml_bis.SVM_Prediction(df_test, loaded_model_SVM_DoH)
+    df_test_norm = nor.NormalizeDataset(df_test)
+    pred_GNB_DoH = ml_bis.GNB_Prediction(df_test_norm, loaded_model_GNB_DoH)
+    pred_KNN_DoH = ml_bis.KNN_Prediction(df_test_norm, loaded_model_KNN_DoH)
+    pred_SVM_DoH = ml_bis.SVM_Prediction(df_test_norm, loaded_model_SVM_DoH)
     
     pred_Simple_DL_Model_Intrusion = dl.DL_simple_Prediction(df_test, loaded_model_Simple_DL_Model_Intrusion)
     
