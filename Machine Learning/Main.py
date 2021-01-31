@@ -43,6 +43,7 @@ def Main():
         print("Nous normalisons les données ...")
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
+        
         '''
         # Correlation
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
