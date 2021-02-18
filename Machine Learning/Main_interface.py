@@ -42,8 +42,16 @@ loaded_model_SVM_DoH = pickle.load(open(filename_SVM_DoH, 'rb'))
 #Loading DL models for Intrusion
 
 filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_Intrusion.h5'
-
 loaded_model_Simple_DL_Model_Intrusion = load_model(filename_Simple_DL_Model_Intrusion)
+
+filename_Conv1D_Model_Intrusion = 'Intrusion/Conv1D.h5'
+filename_Conv2D_Model_Intrusion = 'Intrusion/Conv2D.h5'
+filename_LSTM_Model_Intrusion = 'Intrusion/LSTM.h5'
+
+loaded_model_Conv1D_Model_Intrusion = load_model(filename_Conv1D_Model_Intrusion)
+loaded_model_Conv2D_Model_Intrusion = load_model(filename_Conv2D_Model_Intrusion)
+loaded_model_LSTM_Model_Intrusion = load_model(filename_LSTM_Model_Intrusion)
+
 
 # On appelle l'interface principale
 button_value = gui.interface(df,'DoH')
@@ -64,5 +72,14 @@ if(button_value == 'Ok'):
     
     pred_Simple_DL_Model_Intrusion = dl.DL_simple_Prediction(df_test, loaded_model_Simple_DL_Model_Intrusion)
     
+    pred_Conv1D_Model_Intrusion = dl.Conv1D_Prediction(df_test, loaded_model_Conv1D_Model_Intrusion)
+    pred_Conv2D_Model_Intrusion = dl.Conv2D_Prediction(df_test, loaded_model_Conv2D_Model_Intrusion)
+    pred_LSTM_Model_Intrusion = dl.LSTM_Prediction(df_test, loaded_model_LSTM_Model_Intrusion)
+    
+    
     # Pop up
-    gui.result(pred_DTC_DoH,pred_RFC_DoH,pred_XGB_DoH,pred_Simple_DL_Model_Intrusion, pred_GNB_DoH,pred_KNN_DoH, pred_SVM_DoH)
+    gui.result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, 
+               pred_GNB_DoH,pred_KNN_DoH, pred_SVM_DoH, 
+               pred_Simple_DL_Model_Intrusion,
+               pred_Conv1D_Model_Intrusion,
+               pred_Conv2D_Model_Intrusion, pred_LSTM_Model_Intrusion)
