@@ -26,13 +26,13 @@ def Main():
     if(reponse == 'A'):
         print('\nVous avez répondu A, c\'est parti pour DoH\n')
         colonne = 'DoH'
-
+        
         df_doh = pd.read_csv("data/l1-doh.csv")
         df_nondoh = pd.read_csv("data/l1-nondoh.csv")
     
         df_total_csv_DoH = pd.concat([df_nondoh,df_doh])
         df_total_csv_DoH.reset_index(inplace=True)
-    
+        
         # Preparation des données
         print("Nous nettoyons les données ...")
         df_total_csv_new_DoH = pc.Preparation_CSV(df_total_csv_DoH, colonne)
@@ -72,7 +72,7 @@ def Main():
         GNB_DoH = ml_bis.GNB(df_total_csv_normalisee_DoH, colonne)
         filename_GNB_DoH = 'DoH/finalized_model_GNB_DoH.sav'
         pickle.dump(GNB_DoH, open(filename_GNB_DoH, 'wb'))
-       
+        
         # KNN KNeighbors Classifier
         KNN_DoH = ml_bis.KNN(df_total_csv_normalisee_DoH, colonne)
         filename_KNN_DoH = 'DoH/finalized_model_KNN_DoH.sav'
@@ -128,10 +128,9 @@ def Main():
         pickle.dump(XGB_Intrusion, open(filename_XGB_Intrusion, 'wb'))
         '''
         # Modeles DL
-        
         Simple_DL_Model_Intrusion = dl.DTC(df_total_csv_normalisee_Intrusion, 'Intrusion')
-        filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_Intrusion.sav'
-        pickle.dump(Simple_DL_Model_Intrusion, open(filename_Simple_DL_Model_Intrusion, 'wb'))
+        
+        # les autres modeles sont sur google colabs
         
     else:
         print('\nVous n\' avez pas bien répondu à la question, réessayez svp')
