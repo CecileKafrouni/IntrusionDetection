@@ -56,9 +56,9 @@ def GNB(df, colonne):
     print("Temps pour GNB (en sec): ", t_total)
 
     
-    fi.FeaturesImportances(df, colonne, GNB, 'Gaussian Naives Bayes')  
+    #fi.FeaturesImportances(df, colonne, GNB, 'Gaussian Naives Bayes')  
     roc.ROC_curve(df, colonne, GNB, 'Gaussian Naives Bayes')
-    cv.cross_validation(df, colonne, GNB, 'Gaussian Naives Bayes')
+    #cv.cross_validation(df, colonne, GNB, 'Gaussian Naives Bayes')
     
     return GNB
 
@@ -106,9 +106,9 @@ def KNN(df, colonne):
     
     print("Temps pour KNN classifier (en sec): ", t_total)
     
-    fi.FeaturesImportances(df, colonne, KNN, 'K Neighbors Classifiers')  
+    #fi.FeaturesImportances(df, colonne, KNN, 'K Neighbors Classifiers')  
     roc.ROC_curve(df, colonne, KNN, 'K Neighbors Classifiers')
-    cv.cross_validation(df, colonne, KNN, 'K Neighbors Classifiers')
+    #cv.cross_validation(df, colonne, KNN, 'K Neighbors Classifiers')
     
     return KNN
 
@@ -142,7 +142,7 @@ def SVM(df, colonne):
     X_test = preprocessing.scale(X_test)
     
     # Create Support Vector Machine
-    SVM = svm.SVC()
+    SVM = svm.SVC(probability=True)
     
     # Train Random Forest Classifer
     SVM.fit(X_train,y_train)
@@ -157,9 +157,9 @@ def SVM(df, colonne):
     
     print("Temps pour SVM classifier (en sec): ", t_total)
     
-    fi.FeaturesImportances(df, colonne, SVM, 'Support Vector Machine')  
+    #fi.FeaturesImportances(df, colonne, SVM, 'Support Vector Machine')  
     roc.ROC_curve(df, colonne, SVM, 'Support Vector Machine')
-    cv.cross_validation(df, colonne, SVM, 'Support Vector Machine')
+    #cv.cross_validation(df, colonne, SVM, 'Support Vector Machine')
     
     return SVM
 
