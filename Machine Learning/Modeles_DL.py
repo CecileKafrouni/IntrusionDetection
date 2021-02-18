@@ -4,18 +4,22 @@
 ------------------------------ Modeles de Deep Learning -----------------------------------
 '''
 
+
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Flatten
+from keras.layers import Dropout
 import numpy as np
 import pandas as pd
-
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import RandomizedSearchCV 
 from sklearn.model_selection import cross_val_score 
 from keras.layers import LeakyReLU
-
-
+from keras.layers.convolutional import Conv1D
+from keras.layers.convolutional import MaxPooling1D
 from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import SMOTE
+
 
 df=pd.read_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';')
 
@@ -116,3 +120,62 @@ def DL_optimized(df):
     print('model accuracy on test data: ', np.round(model_opt.evaluate(X_test, y_test, verbose=0)[1],4))
     
 #DL_optimized(df)
+    
+def model_cnn_1D(df, colonne):
+
+    X = df.drop([colonne], axis = 1)
+    y = df[colonne]
+    
+    oversample = SMOTE()
+    X_smote, y_smote = oversample.fit_sample(X, y)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
+    
+    
+    model = Sequential()
+    model.add(Conv1D(filters=64, kernel_size=3, activation='relu', input_shape=(X_train.shape)))
+    model.add(Conv1D(filters=64, kernel_size=3, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(MaxPooling1D(pool_size=2))
+    model.add(Flatten())
+    model.add(Dense(100, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+
+
+
+#model_cnn_1D(df, 'Intrusion')
+
+
+'''
+------------------ Predictions pour Conv1D, Conv2D, LSTM ---------------------
+'''
+
+def Conv1D_Prediction(df, model): 
+    
+    X_new = df
+    new_prediction_Conv1D = DL_simple.predict(X_new)
+    new_prediction_Conv1D = np.round(new_prediction_Conv1D)
+    
+    print("New prediction Conv1D model: {}".format(new_prediction_Conv1D))
+    return new_prediction_Conv1D
+
+def Conv2D_Prediction(df, model): 
+    
+    X_new = df
+    new_prediction_Conv2D = DL_simple.predict(X_new)
+    new_prediction_Conv2D = np.round(new_prediction_Conv2D)
+    
+    print("New prediction Conv2D model: {}".format(new_prediction_Conv2D))
+    return new_prediction_Conv2D
+
+
+def LSTM_Prediction(df, model): 
+    
+    X_new = df
+    new_prediction_LSTM = DL_simple.predict(X_new)
+    new_prediction_LSTM = np.round(new_prediction_LSTM)
+    
+    print("New prediction LSTM model: {}".format(new_prediction_LSTM))
+    return new_prediction_LSTM
