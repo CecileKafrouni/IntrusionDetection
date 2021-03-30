@@ -29,7 +29,7 @@ def Main():
         
         print('\nVous avez répondu A, c\'est parti pour DoH\n')
         colonne = 'DoH'
-        '''
+        
         df_doh = pd.read_csv("data/l1-doh.csv")
         df_nondoh = pd.read_csv("data/l1-nondoh.csv")
         
@@ -57,7 +57,7 @@ def Main():
         # Correlation
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
         df_correlation_DoH.to_csv("DoH/df_correlation_DoH.csv", sep=';', index=False)
-        '''
+        
         
         df_total_csv_normalisee_DoH = pd.read_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';')
        
@@ -78,7 +78,7 @@ def Main():
         XGB_DoH = ml.XGB(df_total_csv_normalisee_DoH, colonne)
         filename_XGB_DoH = 'DoH/finalized_model_XGB_DoH.sav'
         pickle.dump(XGB_DoH, open(filename_XGB_DoH, 'wb'))   
-        '''
+        
         # Modeles ML autres
          # GNB Gaussian Naives Bayes
         GNB_DoH = ml_bis.GNB(df_total_csv_normalisee_DoH, colonne)
@@ -89,12 +89,12 @@ def Main():
         KNN_DoH = ml_bis.KNN(df_total_csv_normalisee_DoH, colonne)
         filename_KNN_DoH = 'DoH/finalized_model_KNN_DoH.sav'
         pickle.dump(KNN_DoH, open(filename_KNN_DoH, 'wb'))
-        '''
         
+    
     elif(reponse == 'B'):
         print('\nVous avez répondu B, c\'est parti pour Intrusion\n')
         colonne = 'Intrusion'
-        '''
+        
         df_malicious = pd.read_csv("data/l2-malicious.csv")
         df_benign = pd.read_csv("data/l2-benign.csv")
     
@@ -116,7 +116,7 @@ def Main():
         # Correlation
         df_correlation_Intrusion = cor.Correlation(df_total_csv_normalisee_Intrusion, colonne)
         df_correlation_Intrusion.to_csv("Intrusion/df_correlation_Intrusion.csv", sep=';', index=False)
-        '''
+        
         # Modeles DL
         #Simple_DL_Model_Intrusion = dl.DTC(df_total_csv_normalisee_Intrusion, 'Intrusion')
         df_total_csv_normalisee_Intrusion = pd.read_csv('Intrusion/df_total_csv_normalisee_Intrusion.csv', sep=';')
