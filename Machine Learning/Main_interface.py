@@ -5,6 +5,8 @@
 '''
 import sys
 
+sys.setrecursionlimit(sys.getrecursionlimit() * 5)
+
 if not sys.warnoptions:
     import warnings
     warnings.simplefilter("ignore")
@@ -16,13 +18,13 @@ import Interface as gui
 import pickle
 import pandas as pd
 from keras.models import load_model
-from sklearn import preprocessing
 import Preparation_CSV as pc
-
-
+import numpy as np
 import Normalisation_donnees as nor
 
 #df = pd.read_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';')
+
+df=pd.DataFrame()
 
 #Loading ML models for DoH
 
@@ -54,9 +56,17 @@ loaded_model_Conv1D_Model_Intrusion = load_model(filename_Conv1D_Model_Intrusion
 loaded_model_Conv2D_Model_Intrusion = load_model(filename_Conv2D_Model_Intrusion)
 #loaded_model_LSTM_Model_Intrusion = load_model(filename_LSTM_Model_Intrusion)
 
+#interface de debut
+radio_value = gui.beginInterface()
+
+if radio_value == 'Test' : 
+    nb = int(np.random.randint(1,11))
+    df = pd.read_csv("Tests_interface/df_test_"+str(nb)+".csv", sep=';')
+
 
 # On appelle l'interface principale
-button_value = gui.interface()
+button_value = gui.interface(df)
+
 
 if(button_value == 'Ok'):
 
@@ -68,6 +78,10 @@ if(button_value == 'Ok'):
     for colonne in df_test.columns:
         if colonne == 'Timestamp' or colonne == 'TimeStamp' or colonne == 'index' or colonne == 'Label' or colonne == 'Unnamed: 0':
             del df_test[colonne]
+
+        if type(df_test[colonne][0]) == str and colonne != 'SourceIP' and colonne != 'DestinationIP':
+            print('ok')
+            df_test[colonne][0] = 0
     
     
     df_test = pc.IP2Int(df_test, 'SourceIP')
@@ -95,4 +109,4 @@ if(button_value == 'Ok'):
                pred_Conv1D_Model_Intrusion,
                pred_Conv2D_Model_Intrusion)
     
- 
+
