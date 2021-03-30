@@ -15,20 +15,30 @@ import pickle
 
 import Preparation_CSV as pc      
 import Normalisation_donnees as nor
-#import Correlation as cor
+import Correlation as cor
 import Modeles_ML as ml
 import Modeles_ML_autres as ml_bis
 import Modeles_DL as dl
+
+import Remove_Rows as rr
 
 def Main():
     reponse = input('Bonjour, que voulez vous tester ? \n A. DoH \n B. Intrusion \n\n')
     
     if(reponse == 'A'):
+        
         print('\nVous avez répondu A, c\'est parti pour DoH\n')
         colonne = 'DoH'
-        
+        '''
         df_doh = pd.read_csv("data/l1-doh.csv")
         df_nondoh = pd.read_csv("data/l1-nondoh.csv")
+        
+        df_result_doh, df_doh = rr.removeRows(df_doh)
+        df_result_nondoh, df_nondoh = rr.removeRows(df_nondoh)
+    
+        df_result = pd.concat([df_result_doh,df_result_nondoh])
+        df_result.reset_index(inplace=True)
+        df_result.to_csv('df_result.csv', sep = ';')
     
         df_total_csv_DoH = pd.concat([df_nondoh,df_doh])
         df_total_csv_DoH.reset_index(inplace=True)
@@ -44,29 +54,31 @@ def Main():
         df_total_csv_normalisee_DoH = nor.NormalizeDataset(df_total_csv_new_DoH)
         df_total_csv_normalisee_DoH.to_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';', index=False)
         
-        '''
         # Correlation
         df_correlation_DoH = cor.Correlation(df_total_csv_normalisee_DoH, colonne)
         df_correlation_DoH.to_csv("DoH/df_correlation_DoH.csv", sep=';', index=False)
         '''
         
+        df_total_csv_normalisee_DoH = pd.read_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';')
+       
         # Modele ML
         print("Nous démarrons les modèles de Machine Learning ...")
+        
         # DTC Decision Tree Classifier
-        DTC_DoH = ml.DTC(df_total_csv_new_DoH, colonne)
+        DTC_DoH = ml.DTC(df_total_csv_normalisee_DoH, colonne)
         filename_DTC_DoH = 'DoH/finalized_model_DTC_DoH.sav'
         pickle.dump(DTC_DoH, open(filename_DTC_DoH, 'wb'))
        
         # RFC Random Forest Classifier
-        RFC_DoH = ml.RFC(df_total_csv_new_DoH, colonne)
+        RFC_DoH = ml.RFC(df_total_csv_normalisee_DoH, colonne)
         filename_RFC_DoH = 'DoH/finalized_model_RFC_DoH.sav'
         pickle.dump(RFC_DoH, open(filename_RFC_DoH, 'wb'))
         
         # XGB XGBoost Classifier        
-        XGB_DoH = ml.XGB(df_total_csv_new_DoH, colonne)
+        XGB_DoH = ml.XGB(df_total_csv_normalisee_DoH, colonne)
         filename_XGB_DoH = 'DoH/finalized_model_XGB_DoH.sav'
         pickle.dump(XGB_DoH, open(filename_XGB_DoH, 'wb'))   
-        
+        '''
         # Modeles ML autres
          # GNB Gaussian Naives Bayes
         GNB_DoH = ml_bis.GNB(df_total_csv_normalisee_DoH, colonne)
@@ -77,16 +89,12 @@ def Main():
         KNN_DoH = ml_bis.KNN(df_total_csv_normalisee_DoH, colonne)
         filename_KNN_DoH = 'DoH/finalized_model_KNN_DoH.sav'
         pickle.dump(KNN_DoH, open(filename_KNN_DoH, 'wb'))
-        
-        # SVM Support Vector Machine        
-        SVM_DoH = ml_bis.SVM(df_total_csv_normalisee_DoH, colonne)
-        filename_SVM_DoH = 'DoH/finalized_model_SVM_DoH.sav'
-        pickle.dump(SVM_DoH, open(filename_SVM_DoH, 'wb'))   
+        '''
         
     elif(reponse == 'B'):
         print('\nVous avez répondu B, c\'est parti pour Intrusion\n')
         colonne = 'Intrusion'
-        
+        '''
         df_malicious = pd.read_csv("data/l2-malicious.csv")
         df_benign = pd.read_csv("data/l2-benign.csv")
     
@@ -104,33 +112,21 @@ def Main():
         df_total_csv_normalisee_Intrusion = nor.NormalizeDataset(df_total_csv_new_Intrusion)
         df_total_csv_normalisee_Intrusion.to_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';', index=False)
         
-        '''
+        
         # Correlation
-        df_correlation_Intrusion = cor.Correlation(df_split, colonne)
+        df_correlation_Intrusion = cor.Correlation(df_total_csv_normalisee_Intrusion, colonne)
         df_correlation_Intrusion.to_csv("Intrusion/df_correlation_Intrusion.csv", sep=';', index=False)
         '''
-        '''
-        # Modeles ML
-        print("Nous démarrons les modèles de Machine Learning ... \n\n")
-        # DTC Decision Tree Classifier
-        DTC_Intrusion = ml.DTC(df_total_csv_normalisee_Intrusion, colonne)
-        filename_DTC_Intrusion = 'Intrusion/finalized_model_DTC_Intrusion.sav'
-        pickle.dump(DTC_Intrusion, open(filename_DTC_Intrusion, 'wb'))
-
-        # RFC Random Forest Classifier
-        RFC_Intrusion = ml.RFC(df_total_csv_normalisee_Intrusion, colonne)
-        filename_RFC_Intrusion = 'Intrusion/finalized_model_RFC_Intrusion.sav'
-        pickle.dump(RFC_Intrusion, open(filename_RFC_Intrusion, 'wb'))
-        
-        # XGB XGBoost Classifier        
-        XGB_Intrusion = ml.XGB(df_total_csv_normalisee_Intrusion, colonne)
-        filename_XGB_Intrusion = 'Intrusion/finalized_model_XGB_Intrusion.sav'
-        pickle.dump(XGB_Intrusion, open(filename_XGB_Intrusion, 'wb'))
-        '''
         # Modeles DL
-        Simple_DL_Model_Intrusion = dl.DTC(df_total_csv_normalisee_Intrusion, 'Intrusion')
+        #Simple_DL_Model_Intrusion = dl.DTC(df_total_csv_normalisee_Intrusion, 'Intrusion')
+        df_total_csv_normalisee_Intrusion = pd.read_csv('Intrusion/df_total_csv_normalisee_Intrusion.csv', sep=';')
+        cnn1D_model = dl.model_cnn_1D(df_total_csv_normalisee_Intrusion, 'Intrusion',nb_layers=2, first_layer_nb_filters=32, layer_nb_filters=16, dropout_alpha=0.5, 
+             filter_size=3, nb_epochs=8, batch_size=64)
+        cnn1D_model.save('Intrusion/Conv1D.h5')
         
-        # les autres modeles sont sur google colabs
+        cnn2D_model = dl.model_cnn_2D(df_total_csv_normalisee_Intrusion, 'Intrusion', nb_layers=1, first_layer_nb_filters=32, layer_nb_filters=64, nb_epochs=8, batch_size=256)
+        cnn2D_model.save('Intrusion/Conv2D.h5')
+        
         
     else:
         print('\nVous n\' avez pas bien répondu à la question, réessayez svp')
