@@ -18,6 +18,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import classification_report
 from imblearn.over_sampling import SMOTE
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score, f1_score, recall_score
 
 #Models
 from sklearn.tree import DecisionTreeClassifier
@@ -59,12 +62,6 @@ def DTC_Randomized_Search(df, colonne):
 def DTC(df, colonne):
     
     #rs_dtc = DTC_Randomized_Search(df, colonne)
-       
-    t_debut = time.time()
-    print("Training Decision Tree Classifier Algo ...\n ")
-    # Create Decision Tree classifer object
-    DTC = DecisionTreeClassifier(max_depth=1)
-
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -72,7 +69,17 @@ def DTC(df, colonne):
     X_smote, y_smote = oversample.fit_sample(X, y)
     
     X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=42)
-       
+
+    t_debut = time.time()
+    print("Training Decision Tree Classifier Algo ...\n ")
+    
+    # Create Decision Tree classifer object
+    DTC = DecisionTreeClassifier(criterion='entropy', splitter='best', max_depth=3, min_samples_split=2, 
+            min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, 
+            max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, 
+            ccp_alpha=0.0)
+
+    
     #DTC.set_params(**rs_dtc.best_params_)
     
     # Train Decision Tree Classifer
@@ -90,9 +97,15 @@ def DTC(df, colonne):
     
     print("Temps pour DTClassifier (en sec): ", np.round(t_total,4))
         
-    fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
+    #fi.FeaturesImportances(df, colonne, DTC, 'Decision Tree Classifier')  
     roc.ROC_curve(df, colonne, DTC, 'Decision Tree Classifier')
-    cv.cross_validation(df, colonne, DTC, 'Decision Tree Classifier')
+    #cv.cross_validation(df, colonne, DTC, 'Decision Tree Classifier')
+    
+    print("\nMatrice de confusion : \n",confusion_matrix(y_test, y_pred_DTC))
+    print("\nAccuracy : ",accuracy_score(y_test, y_pred_DTC))
+    print("\nPrecision :", precision_score(y_test, y_pred_DTC))
+    print("\nF1 score :", f1_score(y_test, y_pred_DTC))
+    print("\nRecall :", recall_score(y_test, y_pred_DTC))
         
     return DTC
     
@@ -138,19 +151,24 @@ def RFC_Randomized_Search(df, colonne):
 def RFC(df, colonne):
     
     #rs_rfc = RFC_Randomized_Search(df, colonne)
-    
-    t_debut = time.time()
-    print("Training Random Forest Classifier Algo ... \n")
-    # Create Random Forest classifer object
-    RFC = RandomForestClassifier(max_depth=2)
-    
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
     oversample = SMOTE()
     X_smote, y_smote = oversample.fit_sample(X, y)
     
-    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.3, random_state=1)
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
+    t_debut = time.time()
+    print("Training Random Forest Classifier Algo ... \n")
+    # Create Random Forest classifer object
+    RFC = RandomForestClassifier(n_estimators=100, criterion='gini', 
+            max_depth=3, min_samples_split=2, min_samples_leaf=1, 
+            min_weight_fraction_leaf=0.0, max_features='auto', max_leaf_nodes=None, 
+            min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, 
+            oob_score=False, n_jobs=None, random_state=None, warm_start=False, 
+            class_weight=None, ccp_alpha=0.0, max_samples=None)
+    
+    
     
     # Create Random Forest classifer object
     #RFC = RandomForestClassifier()
@@ -171,9 +189,15 @@ def RFC(df, colonne):
     
     print("Temps pour RFClassifier (en sec): ", np.round(t_total,4))
 
-    fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
+    #fi.FeaturesImportances(df, colonne, RFC, 'Random Forest Classifier')   
     roc.ROC_curve(df, colonne, RFC, 'Random Forest Classifier')
-    cv.cross_validation(df, colonne, RFC, 'Random Forest Classifier')
+    #cv.cross_validation(df, colonne, RFC, 'Random Forest Classifier')
+    
+    print("\nMatrice de confusion : \n",confusion_matrix(y_test, y_pred_RFC))
+    print("\nAccuracy : ",accuracy_score(y_test, y_pred_RFC))
+    print("\nPrecision :", precision_score(y_test, y_pred_RFC))
+    print("\nF1 score :", f1_score(y_test, y_pred_RFC))
+    print("\nRecall :", recall_score(y_test, y_pred_RFC))
     
     return RFC
 
@@ -223,12 +247,6 @@ def XGB(df, colonne):
     
     #rs_XGB = XGBoost_Randomized_Search(df, colonne)
     
-    t_debut = time.time()
-    print("Training XGBoost Classifier Algo ... \n")
-    # Create XGBoost Classifier model
-    
-    XGB = xgb.XGBClassifier(objective="binary:logistic",min_child_weight=20)
-    
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -236,6 +254,14 @@ def XGB(df, colonne):
     X_smote, y_smote = oversample.fit_sample(X, y)
     
     X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
+    
+    
+    t_debut = time.time()
+    print("Training XGBoost Classifier Algo ... \n")
+    # Create XGBoost Classifier model
+    
+    XGB = xgb.XGBClassifier()
+    
     
     # Create XGBoost Classifier model
     #XGB = xgb.XGBClassifier(objective="binary:logistic")
@@ -256,9 +282,15 @@ def XGB(df, colonne):
     
     print("Temps pour XGBoost (en sec): ", np.round(t_total,4))
 
-    fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
+    #fi.FeaturesImportances(df, colonne, XGB, 'XGBoost Classifier')  
     roc.ROC_curve(df, colonne, XGB, 'XGBoost Classifier')
-    cv.cross_validation(df, colonne, XGB, 'XGBoost Classifier')
+    #cv.cross_validation(df, colonne, XGB, 'XGBoost Classifier')
+    
+    print("\nMatrice de confusion : \n",confusion_matrix(y_test, y_pred_XGB))
+    print("\nAccuracy : ",accuracy_score(y_test, y_pred_XGB))
+    print("\nPrecision :", precision_score(y_test, y_pred_XGB))
+    print("\nF1 score :", f1_score(y_test, y_pred_XGB))
+    print("\nRecall :", recall_score(y_test, y_pred_XGB))
     
     return XGB
 
