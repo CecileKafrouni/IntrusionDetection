@@ -7,9 +7,15 @@
 import PySimpleGUI as sg
 import pandas as pd
 
-def interface(df, target):
-    df = df.drop([target], axis = 1)
-    liste_colonne = list(df.columns)
+def interface():
+    #df = df.drop([target], axis = 1)
+    #liste_colonne = list(df.columns)
+    liste_colonne = ['SourceIP','DestinationIP', 'SourcePort','DestinationPort', 'Duration', 'FlowBytesSent', 'FlowSentRate', 'FlowBytesReceived', 'FlowReceivedRate',
+'PacketLengthVariance', 'PacketLengthStandardDeviation', 'PacketLengthMean', 'PacketLengthMedian', 'PacketLengthMode', 'PacketLengthSkewFromMedian',
+'PacketLengthSkewFromMode', 'PacketLengthCoefficientofVariation', 'PacketTimeVariance', 'PacketTimeStandardDeviation', 'PacketTimeMean', 'PacketTimeMedian',
+'PacketTimeMode', 'PacketTimeSkewFromMedian', 'PacketTimeSkewFromMode', 'PacketTimeCoefficientofVariation', 'ResponseTimeTimeVariance', 'ResponseTimeTimeStandardDeviation',
+'ResponseTimeTimeMean', 'ResponseTimeTimeMedian', 'ResponseTimeTimeMode', 'ResponseTimeTimeSkewFromMedian', 'ResponseTimeTimeSkewFromMode', 'ResponseTimeTimeCoefficientofVariation']
+    
     print(len(liste_colonne))
     
     sg.theme('DarkBlue3')   
@@ -35,6 +41,7 @@ def interface(df, target):
     window = sg.Window('Informations pour prediction', layout, size=(750,520))
     
     button_value=''
+
     
     while (True):
         event, values = window.read()
@@ -63,46 +70,40 @@ def interface(df, target):
 if __name__ == "__main__":
     interface()
     
-def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH, pred_SVM_DoH, pred_Simple_DL_Model_Intrusion,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion, pred_LSTM_Model_Intrusion):
+def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
     
     compteur=0
     
     if(pred_DTC_DoH == 1.0):
-        resultat_DTC_DoH = 'nonDoH'
+        resultat_DTC_DoH = 'DoH'
         compteur+=1
     else:
-        resultat_DTC_DoH = 'DoH'
+        resultat_DTC_DoH = 'nonDoH'
     
     if(pred_RFC_DoH == 1.0):
-        resultat_RFC_DoH = 'nonDoH'
+        resultat_RFC_DoH = 'DoH'
         compteur+=1
     else:
-        resultat_RFC_DoH = 'DoH'
+        resultat_RFC_DoH = 'nonDoH'
             
     if(pred_XGB_DoH == 1.0):
-        resultat_XGB_DoH = 'nonDoH'
+        resultat_XGB_DoH = 'DoH'
         compteur+=1
     else:
-        resultat_XGB_DoH = 'DoH'
+        resultat_XGB_DoH = 'nonDoH'
        
         
     if(pred_GNB_DoH == 1.0):
-        resultat_GNB_DoH = 'nonDoH'
+        resultat_GNB_DoH = 'DoH'
         compteur+=1
     else:
-        resultat_GNB_DoH = 'DoH'
+        resultat_GNB_DoH = 'nonDoH'
         
     if(pred_KNN_DoH == 1.0):
-        resultat_KNN_DoH = 'nonDoH'
-        compteur+=1
-    else:
         resultat_KNN_DoH = 'DoH'
-    
-    if(pred_SVM_DoH == 1.0):
-        resultat_SVM_DoH = 'nonDoH'
         compteur+=1
     else:
-        resultat_SVM_DoH = 'DoH'
+        resultat_KNN_DoH = 'nonDoH'
     
     
     if(compteur >= 2):
@@ -111,24 +112,18 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH, p
                  'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH),
                  
                  'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
-                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
-                 'Le resultat pour le SVM :{}'.format(resultat_SVM_DoH))
-        result_intrusion(pred_Simple_DL_Model_Intrusion,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion, pred_LSTM_Model_Intrusion)
+                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH))
+        result_intrusion(pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion)
     else:
         sg.popup('Resultat DoH', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
                  'Le resultat pour le RFC :{}'.format(resultat_RFC_DoH), 
                  'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH),
                  
                  'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
-                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
-                 'Le resultat pour le SVM :{}'.format(resultat_SVM_DoH))
+                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH))
     
-def result_intrusion(pred_Simple_DL_Model_Intrusion,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion, pred_LSTM_Model_Intrusion):
+def result_intrusion(pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
     
-    if(pred_Simple_DL_Model_Intrusion == 1.0):
-        resultat_Simple_DL_Model_Intrusion = 'Intrusion'
-    else:
-        resultat_Simple_DL_Model_Intrusion = 'Begnin'
         
     if(pred_Conv1D_Model_Intrusion == 1.0):
         resultat_Conv1D_Model_Intrusion = 'Intrusion'
@@ -140,12 +135,7 @@ def result_intrusion(pred_Simple_DL_Model_Intrusion,pred_Conv1D_Model_Intrusion,
     else:
         resultat_Conv2D_Model_Intrusion = 'Begnin'
     
-    if(pred_LSTM_Model_Intrusion == 1.0):
-        resultat_LSTM_Model_Intrusion = 'Intrusion'
-    else:
-        resultat_LSTM_Model_Intrusion = 'Begnin'
         
-    sg.popup('Resultat Intrusion', 'Le resultat pour le modele de DL simple : {}'.format(resultat_Simple_DL_Model_Intrusion),
+    sg.popup('Resultat Intrusion',
              'Le resultat pour le modele Conv1D : {}'.format(resultat_Conv1D_Model_Intrusion),
-             'Le resultat pour le modele Conv2D : {}'.format(resultat_Conv2D_Model_Intrusion),
-             'Le resultat pour le modele LSTM : {}'.format(resultat_LSTM_Model_Intrusion))
+             'Le resultat pour le modele Conv2D : {}'.format(resultat_Conv2D_Model_Intrusion))
