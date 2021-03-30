@@ -5,20 +5,35 @@
 '''
 
 
+# Basic Libraries
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot
+import time
+
+#Sklearn
+from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import SMOTE
+from sklearn.model_selection import RandomizedSearchCV 
+from sklearn.model_selection import cross_val_score 
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score, f1_score, recall_score
+
+#Keras
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import Flatten
 from keras.layers import Dropout
-import numpy as np
-import pandas as pd
 from keras.wrappers.scikit_learn import KerasClassifier
-from sklearn.model_selection import RandomizedSearchCV 
-from sklearn.model_selection import cross_val_score 
-from keras.layers import LeakyReLU
 from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
-from sklearn.model_selection import train_test_split
-from imblearn.over_sampling import SMOTE
+from keras.layers.convolutional import Conv2D
+from keras.layers.convolutional import MaxPooling2D
+from keras.callbacks import EarlyStopping
+
+from keras.layers import LeakyReLU
 
 
 df=pd.read_csv("Intrusion/df_total_csv_normalisee_Intrusion.csv", sep=';')
@@ -121,8 +136,12 @@ def DL_optimized(df):
     
 #DL_optimized(df)
     
-def model_cnn_1D(df, colonne):
 
+
+''' DEFINITION MODELES DL '''
+
+def model_cnn_1D(df, colonne, nb_layers, first_layer_nb_filters, layer_nb_filters, dropout_alpha, filter_size, nb_epochs, batch_size):
+    
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -130,23 +149,143 @@ def model_cnn_1D(df, colonne):
     X_smote, y_smote = oversample.fit_sample(X, y)
     
     X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
-    
-    
+
+    X_train = X_train.values.reshape(X_train.shape[0],X_train.shape[1],1)
+
+    X_test = X_test.values.reshape(X_test.shape[0], X_test.shape[1], 1)
+     
+    t_debut = time.time()
+
     model = Sequential()
-    model.add(Conv1D(filters=64, kernel_size=3, activation='relu', input_shape=(X_train.shape)))
-    model.add(Conv1D(filters=64, kernel_size=3, activation='relu'))
-    model.add(Dropout(0.5))
+
+    model.add(Conv1D(filters=first_layer_nb_filters, kernel_size=filter_size, activation='relu', input_shape=(X_train.shape[1], X_train.shape[2]))) 
+    if nb_layers != 0:
+      for i in range(0,nb_layers):
+        model.add(Conv1D(filters=layer_nb_filters, kernel_size=filter_size, activation='relu'))
+
+    model.add(Dropout(dropout_alpha))
     model.add(MaxPooling1D(pool_size=2))
     model.add(Flatten())
-    model.add(Dense(100, activation='relu'))
+    model.add(Dense(32, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
+    model.summary()
+
+    history = model.fit(X_train,y_train, batch_size=batch_size, epochs=nb_epochs,validation_split=0.2,callbacks=[EarlyStopping(monitor='val_accuracy', patience=3, min_delta=0.0001)])  
+
+    t_fin = time.time()
+    
+    t_total = t_fin - t_debut
+    
+    print("\nTemps (en sec): ", np.round(t_total,4))
+    
+
+    print('model accuracy on test data: ', np.round(model.evaluate(X_test, y_test, verbose=0)[1],4))
+
+    y_pred = np.round(model.predict(X_test))
+
+    print("\nMatrice de confusion : \n",confusion_matrix(y_test, y_pred))
+    print("\nAccuracy : ",accuracy_score(y_test, y_pred))
+    print("\nPrecision :", precision_score(y_test, y_pred))
+    print("\nF1 score :", f1_score(y_test, y_pred))
+    print("\nRecall score :", recall_score(y_test, y_pred))
+
+    # plot accuracy
+    pyplot.plot(history.history['accuracy'])
+    pyplot.plot(history.history['val_accuracy'])
+    pyplot.title('model train vs validation accuracy')
+    pyplot.ylabel('accuracy')
+    pyplot.xlabel('epoch')
+    pyplot.legend(['train', 'validation'], loc='lower right')
+    pyplot.show()
+
+    # plot loss
+    pyplot.plot(history.history['loss'])
+    pyplot.plot(history.history['val_loss'])
+    pyplot.title('model train vs validation loss')
+    pyplot.ylabel('loss')
+    pyplot.xlabel('epoch')
+    pyplot.legend(['train', 'validation'], loc='upper right')
+    pyplot.show()
+    
+    return model
 
 
+def model_cnn_2D(df, colonne, nb_layers, first_layer_nb_filters, layer_nb_filters, nb_epochs, batch_size): 
+  
+    X = df.drop([colonne], axis = 1)
+    y = df[colonne]
+    
+    oversample = SMOTE()
+    X_smote, y_smote = oversample.fit_sample(X, y)
+    
+    scaler = MinMaxScaler(feature_range=(0, 255))
 
-#model_cnn_1D(df, 'Intrusion')
+    scaler = scaler.fit(X_smote)
+    X_scaled = scaler.transform(X_smote)
+    
+    X_train, X_test, y_train, y_test = train_test_split(X_smote, y_smote, test_size=0.2, random_state=1)
+    X_train = X_train.values.reshape(X_train.shape[0],X_train.shape[1], 1, 1)
 
+    X_test = X_test.values.reshape(X_test.shape[0], X_test.shape[1], 1, 1)
+
+    t_debut = time.time()
+
+    model = Sequential()
+    model.add(Conv2D(first_layer_nb_filters, (3, 3), activation='relu', input_shape=(33, 1, 1), padding='same'))
+    model.add(MaxPooling2D((2, 2), padding='same'))
+
+    if nb_layers != 0:
+      for i in range(0,nb_layers):
+        model.add(Conv2D(layer_nb_filters, (3, 3), activation='relu', padding='same'))
+        model.add(MaxPooling2D((2, 2), padding='same'))
+        print('couche ajoutee')
+
+    model.add(Flatten())
+    model.add(Dense(16, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    model.summary()
+
+    history = model.fit(X_train,y_train, batch_size=batch_size, epochs=nb_epochs,validation_split=0.2,callbacks=[EarlyStopping(monitor='val_accuracy', patience=3, min_delta=0.0001)])  
+
+    t_fin = time.time()
+    
+    t_total = t_fin - t_debut
+    
+    print("\nTemps (en sec): ", np.round(t_total,4))
+    
+    print('model accuracy on test data: ', np.round(model.evaluate(X_test, y_test, verbose=0)[1],4))
+
+    y_pred = np.round(model.predict(X_test))
+
+    print("\nMatrice de confusion : \n",confusion_matrix(y_test, y_pred))
+    print("\nAccuracy : ",accuracy_score(y_test, y_pred))
+    print("\nPrecision :", precision_score(y_test, y_pred))
+    print("\nF1 score :", f1_score(y_test, y_pred))
+    print("\nRecall score :", recall_score(y_test, y_pred))
+
+    # plot accuracy
+    pyplot.plot(history.history['accuracy'])
+    pyplot.plot(history.history['val_accuracy'])
+    pyplot.title('model train vs validation accuracy')
+    pyplot.ylabel('accuracy')
+    pyplot.xlabel('epoch')
+    pyplot.legend(['train', 'validation'], loc='lower right')
+    pyplot.show()
+
+    # plot loss
+    pyplot.plot(history.history['loss'])
+    pyplot.plot(history.history['val_loss'])
+    pyplot.title('model train vs validation loss')
+    pyplot.ylabel('loss')
+    pyplot.xlabel('epoch')
+    pyplot.legend(['train', 'validation'], loc='upper right')
+    pyplot.show()
+    
+    return model
 
 '''
 ------------------ Predictions pour Conv1D, Conv2D, LSTM ---------------------
@@ -155,7 +294,9 @@ def model_cnn_1D(df, colonne):
 def Conv1D_Prediction(df, model): 
     
     X_new = df
-    new_prediction_Conv1D = DL_simple.predict(X_new)
+    X_new = X_new.values.reshape(X_new.shape[0],X_new.shape[1],1)
+
+    new_prediction_Conv1D = model.predict(X_new)
     new_prediction_Conv1D = np.round(new_prediction_Conv1D)
     
     print("New prediction Conv1D model: {}".format(new_prediction_Conv1D))
@@ -164,13 +305,15 @@ def Conv1D_Prediction(df, model):
 def Conv2D_Prediction(df, model): 
     
     X_new = df
-    new_prediction_Conv2D = DL_simple.predict(X_new)
+    X_new = X_new.values.reshape(X_new.shape[0],X_new.shape[1],1,1)
+
+    new_prediction_Conv2D = model.predict(X_new)
     new_prediction_Conv2D = np.round(new_prediction_Conv2D)
     
     print("New prediction Conv2D model: {}".format(new_prediction_Conv2D))
     return new_prediction_Conv2D
 
-
+# on ne fait plus LSTM car trop long et avec peu d'epoch sous-apprend
 def LSTM_Prediction(df, model): 
     
     X_new = df
