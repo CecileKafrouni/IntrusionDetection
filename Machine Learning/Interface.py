@@ -7,7 +7,47 @@
 import PySimpleGUI as sg
 import pandas as pd
 
-def interface():
+
+def beginInterface():
+    sg.theme('DarkBlue3')
+    
+    
+    frame_layout =  [[sg.Text("Pour utiliser l'application avec des données de test, choisissez ' Test '. \nSi vous voulez insérer vous-même les valeurs, cliquez sur ' New '.")],
+                       [sg.Radio('Test', "RADIO1", default=True),
+    sg.Radio('New', "RADIO1")]]
+    
+    
+    layout = [
+              [sg.Frame('Veuillez sélectionner une case', frame_layout, font=15)],
+              [sg.Button('Ok'), sg.Button('Cancel')]
+             ]
+   
+    window = sg.Window('TEST', layout, size=(500,150))
+    
+    radio_value=''
+
+    
+    while (True):
+        event, values = window.read()
+        if event == sg.WIN_CLOSED or event == 'Cancel': 
+            radio_value='New'
+            window.close()
+            break
+        
+        elif event == 'Ok':
+            print(values)
+            if values[0] == True:
+                radio_value = 'Test'
+            
+            elif values[1] == True:
+                radio_value = 'New'
+            
+            window.close()
+            break
+        
+    return radio_value
+
+def interface(df):
     #df = df.drop([target], axis = 1)
     #liste_colonne = list(df.columns)
     liste_colonne = ['SourceIP','DestinationIP', 'SourcePort','DestinationPort', 'Duration', 'FlowBytesSent', 'FlowSentRate', 'FlowBytesReceived', 'FlowReceivedRate',
@@ -16,16 +56,20 @@ def interface():
 'PacketTimeMode', 'PacketTimeSkewFromMedian', 'PacketTimeSkewFromMode', 'PacketTimeCoefficientofVariation', 'ResponseTimeTimeVariance', 'ResponseTimeTimeStandardDeviation',
 'ResponseTimeTimeMean', 'ResponseTimeTimeMedian', 'ResponseTimeTimeMode', 'ResponseTimeTimeSkewFromMedian', 'ResponseTimeTimeSkewFromMode', 'ResponseTimeTimeCoefficientofVariation']
     
-    print(len(liste_colonne))
+    
     
     sg.theme('DarkBlue3')   
     
     frame_layout = []
-        
-    for i in range(0,len(liste_colonne)):
-        frame_layout.append([sg.Text(liste_colonne[i], size=(30, 1)), 
-                       sg.InputText(default_text = 0,size=(10,1))])
-
+    
+    if not df.empty:
+        for i in range(0,len(liste_colonne)):
+            frame_layout.append([sg.Text(liste_colonne[i], size=(30, 1)), 
+                           sg.InputText(default_text = df[liste_colonne[i]].values[0],size=(10,1))])
+    else:
+        for i in range(0,len(liste_colonne)):
+            frame_layout.append([sg.Text(liste_colonne[i], size=(30, 1)), 
+                           sg.InputText(default_text = 0,size=(10,1))])
     frame_layout = [
                     [sg.Column(frame_layout[0:int(len(liste_colonne)/2)+1], element_justification='c'), 
                      sg.VerticalSeparator(pad=None),
