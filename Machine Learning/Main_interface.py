@@ -22,6 +22,8 @@ import Preparation_CSV as pc
 import numpy as np
 import Normalisation_donnees as nor
 
+
+original_dataset=pd.read_csv('DoH/total_csv_copy_DoH.csv', sep=';')
 #df = pd.read_csv("DoH/df_total_csv_normalisee_DoH.csv", sep=';')
 
 df=pd.DataFrame()
@@ -87,6 +89,7 @@ if(button_value == 'Ok'):
     df_test = pc.IP2Int(df_test, 'SourceIP')
     df_test = pc.IP2Int(df_test, 'DestinationIP')
     df_test = pc.nettoyage(df_test)
+    df_test=nor.NormalizeNewValues(original_dataset, df_test)
     
     # Stocke predictions
     pred_DTC_DoH = ml.DTC_Prediction(df_test, loaded_model_DTC_DoH)
