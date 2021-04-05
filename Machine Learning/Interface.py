@@ -183,3 +183,8 @@ def result_intrusion(pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
     sg.popup('Resultat Intrusion',
              'Le resultat pour le modele Conv1D : {}'.format(resultat_Conv1D_Model_Intrusion),
              'Le resultat pour le modele Conv2D : {}'.format(resultat_Conv2D_Model_Intrusion))
+    
+    
+    
+    
+    
