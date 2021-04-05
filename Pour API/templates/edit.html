@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Edit "{{ post['title'] }}" {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" placeholder="Title"
+               class="form-control"
+               value="{{ request.form['title'] or post['title'] }}">
+        </input>
+    </div>
+
+	
+	<div class="form-group">
+        <label for="test">SourceIP</label>
+        <input name="SourceIP" placeholder="SourceIP"
+                  class="form-control" value="{{ request.form['SourceIP'] or post['SourceIP'] }}"></input>
+    </div>
+
+	<div class="form-group">
+        <label for="test">DestinationIP</label>
+        <input name="DestinationIP" placeholder="DestinationIP"
+                  class="form-control" value="{{ request.form['DestinationIP'] or post['DestinationIP']}}"></input>
+    </div>
+
+	<div class="form-group">
+        <label for="test">SourcePort</label>
+        <input name="SourcePort" placeholder="SourcePort"
+                  class="form-control" value="{{ request.form['SourcePort'] or post['SourcePort']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">DestinationPort</label>
+        <input name="DestinationPort" placeholder="DestinationPort"
+                  class="form-control" value="{{ request.form['DestinationPort'] or post['DestinationPort']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">Duration</label>
+        <input name="Duration" placeholder="Duration"
+                  class="form-control" value="{{ request.form['Duration'] or post['Duration']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">FlowBytesSent</label>
+        <input name="FlowBytesSent" placeholder="FlowBytesSent"
+                  class="form-control" value="{{ request.form['FlowBytesSent'] or post['FlowBytesSent']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">FlowSentRate</label>
+        <input name="FlowSentRate" placeholder="FlowSentRate"
+                  class="form-control" value="{{ request.form['FlowSentRate'] or post['FlowSentRate']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">FlowBytesReceived</label>
+        <input name="FlowBytesReceived" placeholder="FlowBytesReceived"
+                  class="form-control" value="{{ request.form['FlowBytesReceived'] or post['FlowBytesReceived']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">FlowReceivedRate</label>
+        <input name="FlowReceivedRate" placeholder="FlowReceivedRate"
+                  class="form-control" value="{{ request.form['FlowReceivedRate'] or post['FlowReceivedRate']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthVariance</label>
+        <input name="PacketLengthVariance" placeholder="PacketLengthVariance"
+                  class="form-control"  value="{{ request.form['PacketLengthVariance'] or post['PacketLengthVariance']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthStandardDeviation</label>
+        <input name="PacketLengthStandardDeviation" placeholder="PacketLengthStandardDeviation"
+                  class="form-control" value="{{ request.form['PacketLengthStandardDeviation'] or post['PacketLengthStandardDeviation']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthMean</label>
+        <input name="PacketLengthMean" placeholder="PacketLengthMean"
+                  class="form-control" value="{{ request.form['PacketLengthMean'] or post['PacketLengthMean']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthMedian</label>
+        <input name="PacketLengthMedian" placeholder="PacketLengthMedian"
+                  class="form-control" value="{{ request.form['PacketLengthMedian'] or post['PacketLengthMedian']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthMode</label>
+        <input name="PacketLengthMode" placeholder="PacketLengthMode"
+                  class="form-control" value="{{ request.form['PacketLengthMode'] or post['PacketLengthMode']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthSkewFromMedian</label>
+        <input name="PacketLengthSkewFromMedian" placeholder="PacketLengthSkewFromMedian"
+                  class="form-control" value="{{ request.form['PacketLengthSkewFromMedian'] or post['PacketLengthSkewFromMedian']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthSkewFromMode</label>
+        <input name="PacketLengthSkewFromMode" placeholder="PacketLengthSkewFromMode"
+                  class="form-control" value="{{ request.form['PacketLengthSkewFromMode'] or post['PacketLengthSkewFromMode']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketLengthCoefficientofVariation</label>
+        <input name="PacketLengthCoefficientofVariation" placeholder="PacketLengthCoefficientofVariation"
+                  class="form-control" value="{{ request.form['PacketLengthCoefficientofVariation'] or post['PacketLengthCoefficientofVariation']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeVariance</label>
+        <input name="PacketTimeVariance" placeholder="PacketTimeVariance"
+                  class="form-control"  value="{{ request.form['PacketTimeVariance'] or post['PacketTimeVariance']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeStandardDeviation</label>
+        <input name="PacketTimeStandardDeviation" placeholder="PacketTimeStandardDeviation"
+                  class="form-control" value="{{ request.form['PacketTimeStandardDeviation'] or post['PacketTimeStandardDeviation']}}"></input>
+
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeMean</label>
+        <input name="PacketTimeMean" placeholder="PacketTimeMean"
+                  class="form-control" value="{{ request.form['PacketTimeMean'] or post['PacketTimeMean']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeMedian</label>
+        <input name="PacketTimeMedian" placeholder="PacketTimeMedian"
+                  class="form-control" value="{{ request.form['PacketTimeMedian'] or post['PacketTimeMedian']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeMode</label>
+        <input name="PacketTimeMode" placeholder="PacketTimeMode"
+                  class="form-control" value="{{ request.form['PacketTimeMode'] or post['PacketTimeMode']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeSkewFromMedian</label>
+        <input name="PacketTimeSkewFromMedian" placeholder="PacketTimeSkewFromMedian"
+                  class="form-control" value="{{ request.form['PacketTimeSkewFromMedian'] or post['PacketTimeSkewFromMedian']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeSkewFromMode</label>
+        <input name="PacketTimeSkewFromMode" placeholder="PacketTimeSkewFromMode"
+                  class="form-control" value="{{ request.form['PacketTimeSkewFromMode'] or post['PacketTimeSkewFromMode']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">PacketTimeCoefficientofVariation</label>
+        <input name="PacketTimeCoefficientofVariation" placeholder="PacketTimeCoefficientofVariation"
+                  class="form-control" value="{{ request.form['PacketTimeCoefficientofVariation'] or post['PacketTimeCoefficientofVariation']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeVariance</label>
+        <input name="ResponseTimeTimeVariance" placeholder="ResponseTimeTimeVariance"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeVariance'] or post['ResponseTimeTimeVariance']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeStandardDeviation</label>
+        <input name="ResponseTimeTimeStandardDeviation" placeholder="ResponseTimeTimeStandardDeviation"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeStandardDeviation'] or post['ResponseTimeTimeStandardDeviation']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeMean</label>
+        <input name="ResponseTimeTimeMean" placeholder="ResponseTimeTimeMean"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeMean'] or post['ResponseTimeTimeMean']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeMedian</label>
+        <input name="ResponseTimeTimeMedian" placeholder="ResponseTimeTimeMedian"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeMedian'] or post['ResponseTimeTimeMedian']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeMode</label>
+        <input name="ResponseTimeTimeMode" placeholder="ResponseTimeTimeMode"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeMode'] or post['ResponseTimeTimeMode']}}"></input>
+
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeSkewFromMedian</label>
+        <input name="ResponseTimeTimeSkewFromMedian" placeholder="ResponseTimeTimeSkewFromMedian"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeSkewFromMedian'] or post['ResponseTimeTimeSkewFromMedian']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeSkewFromMode</label>
+        <input name="ResponseTimeTimeSkewFromMode" placeholder="ResponseTimeTimeSkewFromMode"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeSkewFromMode'] or post['ResponseTimeTimeSkewFromMode']}}"></input>
+    </div>
+	<div class="form-group">
+        <label for="test">ResponseTimeTimeCoefficientofVariation</label>
+        <input name="ResponseTimeTimeCoefficientofVariation" placeholder="ResponseTimeTimeCoefficientofVariation"
+                  class="form-control" value="{{ request.form['ResponseTimeTimeCoefficientofVariation'] or post['ResponseTimeTimeCoefficientofVariation']}}"></input>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+<hr>
+
+<form action="{{ url_for('delete', id=post['id']) }}" method="POST">
+    <input type="submit" value="Delete"
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('Are you sure you want to delete this post?')">
+</form>
+{% endblock %}
