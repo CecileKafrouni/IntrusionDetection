@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Test a dataset {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title"
+               placeholder="Title" class="form-control"  required="required"
+               value="{{ request.form['title'] }}"></input>
+    </div>
+
+    <div class="form-group">
+        <label for="choisir fichier">Choisir un fichier CSV</label>
+        <input class="form-control" required="required" name="file" type="file" accept=".csv" />
+        <br />
+        <br />
+        <button type="submit" class="btn btn-primary">Import</button>
+
+        <br />
+    </div>
+
+</form>
+
+{% endblock %}
+
+
+
