@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} {{ post['title'] }} {% endblock %}</h1>
+<span class="badge badge-primary">{{ post['created'] }}</span>
+
+<br>
+<h3 class="text-center">Pr&eacutedictions </h3>
+
+<p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+<p><strong>Les donn&eacutees ins&eacuter&eacutees repr&eacutesentent un <mark>{{post['Label_DoH']}}</mark></strong></p>
+
+<p class="text-center"> <em>D&eacutetails </em> </p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"><em><small># DoH ? (0 : non, 1 : oui)</small></em> </th>
+            <th scope="col"> Decision Tree Classifier </th>
+            <th scope="col"> Random Forest Classifier </th>
+            <th scope="col"> XGBoost Classifier </th>
+            <th scope="col">  K-Nearest Neighbors </th>
+            <th scope="col"> Gaussian Naives Bayes </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">R&eacutesultats</th>
+            <td>{{ post['pred_DTC_DoH'] }}</td>
+            <td>{{ post['pred_RFC_DoH'] }}</td>
+            <td>{{ post['pred_XGB_DoH'] }}</td>
+            <td>{{ post['pred_KNN_DoH'] }}</td>
+            <td>{{ post['pred_GNB_DoH'] }}</td>
+        </tr>
+
+    </tbody>
+</table>
+<p>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+
+
+<p><strong>Les donn&eacutees ins&eacuter&eacutees repr&eacutesentent un traffic <mark>{{ post['Label_Intrusion'] }}</mark></strong> </p>
+<p class="text-center"> <em>D&eacutetails </em> </p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"><em><small># Intrusion ? (0 : non, 1 : oui)</small></em> </th>
+            <th scope="col"> CNN 1D </th>
+            <th scope="col"> CNN 2D </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">R&eacutesultats</th>
+            <td>{{ post['pred_CNN_1D_Intrusion'] }}</td>
+            <td>{{ post['pred_CNN_2D_Intrusion'] }}</td>
+        </tr>
+
+    </tbody>
+</table>
+
+{% endblock %}
