@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% block title %} {{ post['title'] }} {% endblock %}</h2>
+    <span class="badge badge-primary">{{ post['created'] }}</span>
+
+	
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">Feature</th>
+				<th scope="col">Value</th>
+
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row">SourceIP</th>
+				<td> {{ post['SourceIP'] }}</td>
+			</tr>
+
+			<tr>
+				<th scope="row">DestinationIP</th>
+				<td> {{ post['DestinationIP'] }}</td>
+			</tr>
+
+			<tr>
+				<th scope="row">SourcePort</th>
+				<td> {{   post['SourcePort'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">DestinationPort</th>
+				<td> {{   post['DestinationPort'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">Duration</th>
+				<td> {{   post['Duration'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">FlowBytesSent</th>
+				<td> {{   post['FlowBytesSent'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">FlowSentRate</th>
+				<td> {{   post['FlowSentRate'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">FlowBytesReceived</th>
+				<td> {{   post['FlowBytesReceived'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">FlowReceivedRate</th>
+				<td> {{   post['FlowReceivedRate'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketLengthVariance</th>
+				<td> {{   post['PacketLengthVariance'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketLengthStandardDeviation</th>
+				<td> {{   post['PacketLengthStandardDeviation'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketLengthMean</th>
+				<td> {{   post['PacketLengthMean'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketLengthMedian</th>
+				<td> {{   post['PacketLengthMedian'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketLengthMode</th>
+				<td> {{   post['PacketLengthMode'] }}</td>
+				
+			</tr>
+
+
+			<tr>
+				<th scope="row">PacketLengthSkewFromMedian</th>
+				<td> {{   post['PacketLengthSkewFromMedian'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketLengthSkewFromMode</th>
+				<td> {{   post['PacketLengthSkewFromMode'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeCoefficientofVariation</th>
+				<td> {{   post['PacketLengthCoefficientofVariation'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeVariance</th>
+				<td> {{   post['PacketTimeVariance'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeStandardDeviation</th>
+				<td> {{   post['PacketTimeStandardDeviation'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeMean</th>
+				<td> {{   post['PacketTimeMean'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeMedian</th>
+				<td> {{   post['PacketTimeMedian'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeMode</th>
+				<td> {{   post['PacketTimeMode'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeSkewFromMedian</th>
+				<td> {{   post['PacketTimeSkewFromMedian'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeSkewFromMode</th>
+				<td> {{   post['PacketTimeSkewFromMode'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">PacketTimeCoefficientofVariation</th>
+				<td> {{   post['PacketTimeCoefficientofVariation'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">ResponseTimeTimeVariance</th>
+				<td> {{   post['ResponseTimeTimeVariance'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">ResponseTimeTimeStandardDeviation</th>
+				<td> {{   post['ResponseTimeTimeStandardDeviation'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">ResponseTimeTimeMean</th>
+				<td> {{   post['ResponseTimeTimeMean'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">ResponseTimeTimeMedian</th>
+				<td> {{   post['ResponseTimeTimeMedian'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">ResponseTimeTimeMode</th>
+				<td> {{   post['ResponseTimeTimeMode'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">ResponseTimeTimeSkewFromMedian</th>
+				<td> {{   post['ResponseTimeTimeSkewFromMedian'] }}</td>
+				
+			</tr>
+
+			<tr>
+				<th scope="row">ResponseTimeTimeSkewFromMode</th>
+				<td> {{   post['ResponseTimeTimeSkewFromMode'] }}</td>
+				
+			</tr>
+
+
+			<tr>
+				<th scope="row">ResponseTimeTimeCoefficientofVariation</th>
+				<td> {{   post['ResponseTimeTimeCoefficientofVariation'] }}</td>
+			</tr>
+
+
+		</tbody>
+	</table>
+
+
+{% endblock %}
+
