@@ -77,19 +77,28 @@ if(button_value == 'Ok'):
         
     #on prepare les données insérées par l'utilisateur  
     # enlever valeur NaN, transformer IP en int
+    
+    
     for colonne in df_test.columns:
-        if colonne == 'Timestamp' or colonne == 'TimeStamp' or colonne == 'index' or colonne == 'Label' or colonne == 'Unnamed: 0':
+        if colonne == '' or colonne == 'Timestamp' or colonne == 'TimeStamp' or colonne == 'index' or colonne == 'Label' or colonne == 'Unnamed: 0':
             del df_test[colonne]
-
+    for colonne in df_test.columns:
         if type(df_test[colonne][0]) == str and colonne != 'SourceIP' and colonne != 'DestinationIP':
-            print('ok')
             df_test[colonne][0] = 0
+       
     
-    
-    df_test = pc.IP2Int(df_test, 'SourceIP')
-    df_test = pc.IP2Int(df_test, 'DestinationIP')
+    if type(df_test['SourceIP']) != float:
+        df_test = pc.IP2Int(df_test, 'SourceIP')
+    if type(df_test['DestinationIP']) != float:
+        df_test = pc.IP2Int(df_test, 'DestinationIP')
     df_test = pc.nettoyage(df_test)
     df_test=nor.NormalizeNewValues(original_dataset, df_test)
+    
+    
+    for colonne in df_test.columns:
+        if(colonne != 'SourceIP' and colonne != 'DestinationIP'):
+            df_test[colonne] = float(df_test[colonne])        
+    
     
     # Stocke predictions
     pred_DTC_DoH = ml.DTC_Prediction(df_test, loaded_model_DTC_DoH)
