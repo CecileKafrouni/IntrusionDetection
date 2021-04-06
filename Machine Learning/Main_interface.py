@@ -5,7 +5,6 @@
 '''
 import sys
 
-sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 
 if not sys.warnoptions:
     import warnings
@@ -110,6 +109,8 @@ if(button_value == 'Ok'):
     pred_GNB_DoH=0
     #pred_KNN_DoH = ml_bis.KNN_Prediction(df_test_norm, loaded_model_KNN_DoH)
     pred_KNN_DoH = 0
+    #pred_SVM_DoH = ml_bis.SVM_Prediction(df_test_norm, loaded_model_SVM_DoH)
+    pred_SVM_DoH = 0
     
     pred_Conv1D_Model_Intrusion = dl.Conv1D_Prediction(df_test, loaded_model_Conv1D_Model_Intrusion)
     pred_Conv2D_Model_Intrusion = dl.Conv2D_Prediction(df_test, loaded_model_Conv2D_Model_Intrusion)
@@ -117,7 +118,7 @@ if(button_value == 'Ok'):
     
     # Pop up
     gui.result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, 
-               pred_GNB_DoH,pred_KNN_DoH, 
+               pred_GNB_DoH,pred_KNN_DoH, pred_SVM_DoH,
                pred_Conv1D_Model_Intrusion,
                pred_Conv2D_Model_Intrusion)
     
