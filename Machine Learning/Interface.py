@@ -105,7 +105,7 @@ def interface(df):
 if __name__ == "__main__":
     interface()
     
-def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pred_SVM_DoH,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
+def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pred_Per_DoH,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
     
     compteur=0
     
@@ -140,11 +140,11 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pr
     else:
         resultat_KNN_DoH = 'nonDoH'
     
-    if(pred_SVM_DoH == 1.0):
-        resultat_SVM_DoH = 'DoH'
+    if(pred_Per_DoH == 1.0):
+        resultat_Per_DoH = 'DoH'
         compteur+=1
     else:
-        resultat_SVM_DoH = 'nonDoH'
+        resultat_Per_DoH = 'nonDoH'
     
     if(compteur >= 2):
         sg.popup('Resultat DoH', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
@@ -153,7 +153,7 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pr
                  
                  'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
                  'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
-                 'Le resultat pour le KNN :{}'.format(resultat_SVM_DoH), 
+                 'Le resultat pour le Perceptron :{}'.format(resultat_Per_DoH), 
                  '\n{} modeles prédisent un DoH, les données insérées representent donc un DoH'.format(compteur))
         result_intrusion(pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion)
     else:
@@ -163,6 +163,7 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pr
                  
                  'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
                  'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
+                 'Le resultat pour le Perceptron :{}'.format(resultat_Per_DoH),
                  '\n{} modèle prédit un DoH, les données insérées représentent donc un non DoH'.format(compteur))
     
 def result_intrusion(pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
