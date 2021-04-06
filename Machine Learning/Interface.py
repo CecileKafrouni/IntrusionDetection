@@ -11,21 +11,16 @@ import pandas as pd
 def beginInterface():
     sg.theme('DarkBlue3')
     
-    
     frame_layout =  [[sg.Text("Pour utiliser l'application avec des données de test, choisissez ' Test '. \nSi vous voulez insérer vous-même les valeurs, cliquez sur ' New '.")],
                        [sg.Radio('Test', "RADIO1", default=True),
     sg.Radio('New', "RADIO1")]]
-    
     
     layout = [
               [sg.Frame('Veuillez sélectionner une case', frame_layout, font=15)],
               [sg.Button('Ok'), sg.Button('Cancel')]
              ]
-   
-    window = sg.Window('TEST', layout, size=(500,150))
-    
+    window = sg.Window('Choix test ou new', layout, size=(500,150))
     radio_value=''
-
     
     while (True):
         event, values = window.read()
@@ -33,18 +28,14 @@ def beginInterface():
             radio_value='New'
             window.close()
             break
-        
         elif event == 'Ok':
             print(values)
             if values[0] == True:
                 radio_value = 'Test'
-            
             elif values[1] == True:
                 radio_value = 'New'
-            
             window.close()
             break
-        
     return radio_value
 
 def interface(df):
@@ -114,7 +105,7 @@ def interface(df):
 if __name__ == "__main__":
     interface()
     
-def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
+def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pred_SVM_DoH,pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
     
     compteur=0
     
@@ -149,6 +140,11 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pr
     else:
         resultat_KNN_DoH = 'nonDoH'
     
+    if(pred_SVM_DoH == 1.0):
+        resultat_SVM_DoH = 'DoH'
+        compteur+=1
+    else:
+        resultat_SVM_DoH = 'nonDoH'
     
     if(compteur >= 2):
         sg.popup('Resultat DoH', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
@@ -156,7 +152,9 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pr
                  'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH),
                  
                  'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
-                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH))
+                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
+                 'Le resultat pour le KNN :{}'.format(resultat_SVM_DoH), 
+                 '\n{} modeles prédisent un DoH, les données insérées representent donc un DoH'.format(compteur))
         result_intrusion(pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion)
     else:
         sg.popup('Resultat DoH', 'Le resultat pour le DTC :{}'.format(resultat_DTC_DoH),
@@ -164,26 +162,34 @@ def result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, pred_GNB_DoH,pred_KNN_DoH,pr
                  'Le resultat pour le XGB :{}'.format(resultat_XGB_DoH),
                  
                  'Le resultat pour le GNB :{}'.format(resultat_GNB_DoH),
-                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH))
+                 'Le resultat pour le KNN :{}'.format(resultat_KNN_DoH),
+                 '\n{} modèle prédit un DoH, les données insérées représentent donc un non DoH'.format(compteur))
     
 def result_intrusion(pred_Conv1D_Model_Intrusion,pred_Conv2D_Model_Intrusion):
     
-        
+    compteur = 0   
     if(pred_Conv1D_Model_Intrusion == 1.0):
         resultat_Conv1D_Model_Intrusion = 'Intrusion'
+        compteur+=1
     else:
         resultat_Conv1D_Model_Intrusion = 'Begnin'
         
     if(pred_Conv2D_Model_Intrusion == 1.0):
         resultat_Conv2D_Model_Intrusion = 'Intrusion'
+        compteur+=1
     else:
         resultat_Conv2D_Model_Intrusion = 'Begnin'
     
-        
-    sg.popup('Resultat Intrusion',
-             'Le resultat pour le modele Conv1D : {}'.format(resultat_Conv1D_Model_Intrusion),
-             'Le resultat pour le modele Conv2D : {}'.format(resultat_Conv2D_Model_Intrusion))
-    
+    if(compteur == 2):
+        sg.popup('Resultat Intrusion',
+                 'Le resultat pour le modele Conv1D : {}'.format(resultat_Conv1D_Model_Intrusion),
+                 'Le resultat pour le modele Conv2D : {}'.format(resultat_Conv2D_Model_Intrusion),
+                 '\nLes données insérées représentent donc un trafic Intrusif')
+    else:
+        sg.popup('Resultat Intrusion',
+                 'Le resultat pour le modele Conv1D : {}'.format(resultat_Conv1D_Model_Intrusion),
+                 'Le resultat pour le modele Conv2D : {}'.format(resultat_Conv2D_Model_Intrusion),
+                 '\nLes données insérées représentent donc un trafic Bénin')
     
     
     
