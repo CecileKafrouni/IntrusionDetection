@@ -70,7 +70,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'azerty1234'
 
 @app.route('/')
-
 def index():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts').fetchall()
