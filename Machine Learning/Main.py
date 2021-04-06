@@ -90,6 +90,11 @@ def Main():
         filename_KNN_DoH = 'DoH/finalized_model_KNN_DoH.sav'
         pickle.dump(KNN_DoH, open(filename_KNN_DoH, 'wb'))
         
+        # Perceptron 
+        Per_DoH = ml_bis.Perceptron(df_total_csv_normalisee_DoH, colonne)
+        filename_Per_DoH = 'DoH/finalized_model_Per_DoH.sav'
+        pickle.dump(Per_DoH, open(filename_Per_DoH, 'wb'))
+        
     
     elif(reponse == 'B'):
         print('\nVous avez répondu B, c\'est parti pour Intrusion\n')
