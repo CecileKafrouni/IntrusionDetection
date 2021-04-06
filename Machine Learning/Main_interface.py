@@ -35,7 +35,8 @@ filename_XGB_DoH = 'DoH/finalized_model_XGB_DoH.sav'
 
 filename_GNB_DoH = 'DoH/finalized_model_GNB_DoH.sav'
 filename_KNN_DoH = 'DoH/finalized_model_KNN_DoH.sav'
-filename_SVM_DoH = 'DoH/finalized_model_SVM_DoH.sav'
+#filename_SVM_DoH = 'DoH/finalized_model_SVM_DoH.sav'
+filename_Per_DoH = 'DoH/finalized_model_Per_DoH.sav'
 
 loaded_model_DTC_DoH = pickle.load(open(filename_DTC_DoH, 'rb'))
 loaded_model_RFC_DoH = pickle.load(open(filename_RFC_DoH, 'rb'))
@@ -43,11 +44,9 @@ loaded_model_XGB_DoH = pickle.load(open(filename_XGB_DoH, 'rb'))
 
 #loaded_model_GNB_DoH = pickle.load(open(filename_GNB_DoH, 'rb'))
 #loaded_model_KNN_DoH = pickle.load(open(filename_KNN_DoH, 'rb'))
+#loaded_model_Per_DoH = pickle.load(open(filename_Per_DoH, 'rb'))
 
 #Loading DL models for Intrusion
-
-#filename_Simple_DL_Model_Intrusion = 'Intrusion/finalized_model_Simple_DL_Model_Intrusion.h5'
-#loaded_model_Simple_DL_Model_Intrusion = load_model(filename_Simple_DL_Model_Intrusion)
 
 filename_Conv1D_Model_Intrusion = 'Intrusion/Conv1D.h5'
 filename_Conv2D_Model_Intrusion = 'Intrusion/Conv2D.h5'
@@ -109,8 +108,8 @@ if(button_value == 'Ok'):
     pred_GNB_DoH=0
     #pred_KNN_DoH = ml_bis.KNN_Prediction(df_test_norm, loaded_model_KNN_DoH)
     pred_KNN_DoH = 0
-    #pred_SVM_DoH = ml_bis.SVM_Prediction(df_test_norm, loaded_model_SVM_DoH)
-    pred_SVM_DoH = 0
+    #pred_Per_DoH = ml_bis.Per_Prediction(df_test_norm, loaded_model_Per_DoH)
+    pred_Per_DoH = 0
     
     pred_Conv1D_Model_Intrusion = dl.Conv1D_Prediction(df_test, loaded_model_Conv1D_Model_Intrusion)
     pred_Conv2D_Model_Intrusion = dl.Conv2D_Prediction(df_test, loaded_model_Conv2D_Model_Intrusion)
@@ -118,7 +117,7 @@ if(button_value == 'Ok'):
     
     # Pop up
     gui.result(pred_DTC_DoH,pred_RFC_DoH, pred_XGB_DoH, 
-               pred_GNB_DoH,pred_KNN_DoH, pred_SVM_DoH,
+               pred_GNB_DoH,pred_KNN_DoH, pred_Per_DoH,
                pred_Conv1D_Model_Intrusion,
                pred_Conv2D_Model_Intrusion)
     
