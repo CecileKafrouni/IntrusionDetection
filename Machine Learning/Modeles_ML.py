@@ -60,8 +60,6 @@ def DTC_Randomized_Search(df, colonne):
     return rs_dtc
        
 def DTC(df, colonne):
-    
-    #rs_dtc = DTC_Randomized_Search(df, colonne)
     X = df.drop([colonne], axis = 1)
     y = df[colonne]
     
@@ -78,9 +76,6 @@ def DTC(df, colonne):
             min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, 
             max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, 
             ccp_alpha=0.0)
-
-    
-    #DTC.set_params(**rs_dtc.best_params_)
     
     # Train Decision Tree Classifer
     DTC = DTC.fit(X_train,y_train)
@@ -88,7 +83,6 @@ def DTC(df, colonne):
     y_pred_DTC = DTC.predict(X_test)
     
     # Metriques du Decision Tree Classifier
-    
     print('\tReport Decision Tree Classifier \n\n', classification_report(y_test, y_pred_DTC))
     
     t_fin = time.time()
@@ -110,9 +104,8 @@ def DTC(df, colonne):
     return DTC
     
 def DTC_Prediction(df, DTC):    
-
     X_new_DTC = df
-    # Predict and print the label for the new data point X_new
+    # Predict 
     new_prediction_DTC = DTC.predict(X_new_DTC)
     print("New prediction DTC: {}".format(new_prediction_DTC))
     return new_prediction_DTC
@@ -202,9 +195,8 @@ def RFC(df, colonne):
     return RFC
 
 def RFC_Prediction(df, RFC): 
-    
     X_new_RFC = df
-    # Predict and print the label for the new data point X_new
+    # Predict 
     new_prediction_RFC = RFC.predict(X_new_RFC)
     print("New prediction RFC: {}".format(new_prediction_RFC))
     return new_prediction_RFC
@@ -268,6 +260,7 @@ def XGB(df, colonne):
     #XGB.set_params(**rs_XGB.best_params_)
     
     # Train XGBoost Classifer
+    
     XGB = XGB.fit(X_train,y_train)
     
     y_pred_XGB = XGB.predict(X_test)
@@ -295,9 +288,8 @@ def XGB(df, colonne):
     return XGB
 
 def XGB_Prediction(df,XGB): 
-
     X_new_XGB = df
-    # Predict and print the label for the new data point X_new
+    # Predict 
     new_prediction_XGB = XGB.predict(X_new_XGB)
     print("New prediction XGB: {}".format(new_prediction_XGB))
     return new_prediction_XGB
